@@ -1,0 +1,23 @@
+# Configuration for SFML 3.0.0 + CMake on VSCode
+
+#(on) <span style="color:#ADD8E6;">Windows</span>
+
+#First, go on `CMakeLists.txt`
+
+#1. for `include_directories("C:/Users/leita/Documents/SFML/SFML-3.0.0/include")` change the path by searching for 'include' folder in SFML folder.
+   
+    #-`C:/Users/your_name/your_location/SFML/SFML-3.0.0/include` <span style="color:red;">just an example</span>
+
+
+#2. for `C:/Users/leita/Documents/SFML/SFML-3.0.0/lib` it's the same, just search for 'lib' folder on SFML folder.
+
+#3. for `set(SFML_DIR "C:/Users/leita/Documents/SFML/SFML-3.0.0/lib/cmake/SFML")` you need to navigate `SFML->SFML3.0.0->lib->cmake->sfml` and copy the location and change it.
+
+#4. Now you can build the project and after you build you need to go in your SFML folder at `bin` and copy all `.ddl` and paste it in `build` folder.
+
+#<span style="color:green;">Do not forget to change the CMake project name IF your project name is different `project(test VERSION 1.0)` DEFAULT project name: SFML and CMake</span>
+#<span style="color:green;">and the CMake minimum versuin to be set on `3.10` or higher `cmake_minimum_required(VERSION 3.10)`</span>
+
+#5. <span style="color:orange;">Have fun!</span>
+
+#(on) <span style="color:yellow;">Linux comming soon ....
