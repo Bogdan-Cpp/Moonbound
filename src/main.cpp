@@ -3,26 +3,28 @@
 #include <iostream>
 #include <optional>
 #include "startm.h"
+#include "mainGame.h"
 
 int main(){
     //variabile generale
     bool isStartMusic = true;
     bool isStartMenu = true;
+    bool isStartGame = false;
 
     auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "Moonbound");
     window.setFramerateLimit(60);
-    
+
     //class apelation
+    Game start;
     MenuS *menuStart = new MenuS();
     sf::Music startMusic;
     sf::Image image;
     
     //file verification
-    if(!startMusic.openFromFile("C:/Users/leita/Documents/Moonbound/src/music.ogg")){return -1;}
-    if(!image.loadFromFile("C:/Users/leita/Documents/Moonbound/src/gameIcon.png")){return -1;}
+    if(!startMusic.openFromFile("C:/Users/leita/Documents/Moonbound/materials/music.ogg")){return -1;}
+    if(!image.loadFromFile("C:/Users/leita/Documents/Moonbound/materials/gameIcon.png")){return -1;}
 
     if(isStartMusic){
-        //music
         startMusic.play();
     }
     window.setIcon(image);
@@ -38,6 +40,7 @@ int main(){
         
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::E)){
             isStartMenu = false;
+            isStartGame = true;
             delete menuStart;
             menuStart = nullptr;
             startMusic.stop();
@@ -47,7 +50,16 @@ int main(){
         if(isStartMenu && menuStart != nullptr){
             menuStart->startMenu(window);
         }
+
+        if(isStartGame){
+            start.Objectdraw(window);
+        }
         window.display();
+    }
+
+    if(menuStart != nullptr){
+        delete menuStart;
+        menuStart = nullptr;
     }
     return 0;
 }
