@@ -6,11 +6,8 @@
 
 class MenuS{
   public:
-    void startMenu(sf::RenderWindow& window){
+    void startMenu(sf::RenderWindow& window, sf::Font &fStart){
       //text
-      sf::Font fStart;
-
-      if(!fStart.openFromFile("C:/Users/leita/Documents/Moonbound/materials/startFont.ttf")){return;}
       sf::Text title(fStart, "Moonbound", 100);
       title.setPosition(sf::Vector2f(150.f, 200.f));
       title.setFillColor(sf::Color::Yellow);

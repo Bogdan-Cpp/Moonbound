@@ -19,10 +19,13 @@ int main(){
     MenuS *menuStart = new MenuS();
     sf::Music startMusic;
     sf::Image image;
+    sf::Font fStart;
+    sf::RectangleShape box;
     
     //file verification
-    if(!startMusic.openFromFile("C:/Users/leita/Documents/Moonbound/materials/music.ogg")){return -1;}
-    if(!image.loadFromFile("C:/Users/leita/Documents/Moonbound/materials/gameIcon.png")){return -1;}
+    if(!fStart.openFromFile("../materials/startFont.ttf")){return -1;}
+    if(!startMusic.openFromFile("../materials/music.ogg")){return -1;}
+    if(!image.loadFromFile("../materials/gameIcon.png")){return -1;}
 
     if(isStartMusic){
         startMusic.play();
@@ -45,14 +48,15 @@ int main(){
             menuStart = nullptr;
             startMusic.stop();
         }
+
         window.clear(sf::Color::Black);
         
         if(isStartMenu && menuStart != nullptr){
-            menuStart->startMenu(window);
+            menuStart->startMenu(window, fStart);
         }
 
         if(isStartGame){
-            start.Objectdraw(window);
+            start.Objectdraw(window, box);
         }
         window.display();
     }
