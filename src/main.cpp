@@ -21,7 +21,12 @@ int main(){
     sf::Image image;
     sf::Font fStart;
     sf::RectangleShape box;
-    
+    sf::RectangleShape box2;
+    sf::View camera(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920.f, 1080.f)));
+
+    //function declaration
+    start.PlayerBuild(box);
+
     //file verification
     if(!fStart.openFromFile("../materials/startFont.ttf")){return -1;}
     if(!startMusic.openFromFile("../materials/music.ogg")){return -1;}
@@ -41,6 +46,12 @@ int main(){
             }
         }
         
+        if(isStartGame){
+            start.PlayerMove(box);
+            camera.setCenter(box.getPosition());
+            window.setView(camera);
+        }
+
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::E)){
             isStartMenu = false;
             isStartGame = true;
@@ -48,7 +59,7 @@ int main(){
             menuStart = nullptr;
             startMusic.stop();
         }
-
+        
         window.clear(sf::Color::Black);
         
         if(isStartMenu && menuStart != nullptr){
@@ -56,7 +67,8 @@ int main(){
         }
 
         if(isStartGame){
-            start.Objectdraw(window, box);
+            window.draw(box2);
+            start.PlayerDeclaration(window, box);
         }
         window.display();
     }

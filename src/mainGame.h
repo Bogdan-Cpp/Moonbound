@@ -6,11 +6,19 @@
 
 class Game{
   public:
-   void Objectdraw(sf::RenderWindow& window, sf::RectangleShape &box){
+  int speed = 4;
+  
+   void PlayerBuild(sf::RectangleShape &box){
       box.setFillColor(sf::Color::White);
-      box.setSize(sf::Vector2f(500.f, 200.f));
-      box.setPosition(sf::Vector2f(100.f, 100.f));
+      box.setSize(sf::Vector2f(100.f, 100.f));
+      box.setPosition(sf::Vector2f(100.f, 700.f));
+   }
 
+   void PlayerDeclaration(sf::RenderWindow& window, sf::RectangleShape &box){
       window.draw(box);
+   }
+
+   void PlayerMove(sf::RectangleShape &box){
+      box.move(sf::Vector2f(speed, 0.f));
    }
 };
