@@ -2,40 +2,43 @@
 #include <SFML/Audio.hpp>
 #include <iostream>
 #include <optional>
-#include "startm.h"
-#include "mainGame.h"
+#include "menus/startm.h"
+#include "player.h"
+#include "map/ground.h"
+
+void settingsButton(MenuS *&menuStart, bool &isSettingsMenu, bool &isStartMenu);
+void startButton(MenuS *&menuStart, sf::Music *startMusic, bool &isStartMenu, bool &isStartGame);
 
 int main(){
     //variabile generale
-    bool isStartMusic = true;
     bool isStartMenu = true;
     bool isStartGame = false;
+    bool isSettingsMenu = false;
 
     auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "Moonbound");
     window.setFramerateLimit(60);
 
     //class apelation
-    Game start;
-    MenuS *menuStart = new MenuS();
-    sf::Music startMusic;
+    Player py;
+    Ground gr;
     sf::Image image;
     sf::Font fStart;
     sf::RectangleShape box;
-    sf::RectangleShape box2;
+    sf::RectangleShape ground1;
     sf::View camera(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920.f, 1080.f)));
+    MenuS *menuStart = new MenuS();
+    sf::Music *startMusic = new sf::Music();
 
     //function declaration
-    start.PlayerBuild(box);
-
+    py.PlayerBuild(box);
+    
     //file verification
     if(!fStart.openFromFile("../materials/startFont.ttf")){return -1;}
-    if(!startMusic.openFromFile("../materials/music.ogg")){return -1;}
+    if(!startMusic->openFromFile("../materials/music.ogg")){return -1;}
     if(!image.loadFromFile("../materials/gameIcon.png")){return -1;}
 
-    if(isStartMusic){
-        startMusic.play();
-    }
     window.setIcon(image);
+    startMusic->play();
 
     while(window.isOpen()){
 
@@ -47,19 +50,15 @@ int main(){
         }
         
         if(isStartGame){
-            start.PlayerMove(box);
+            py.PlayerMove(box);
             camera.setCenter(box.getPosition());
             window.setView(camera);
         }
 
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::E)){
-            isStartMenu = false;
-            isStartGame = true;
-            delete menuStart;
-            menuStart = nullptr;
-            startMusic.stop();
-        }
-        
+        //function
+        settingsButton(menuStart, isSettingsMenu, isStartMenu);
+        startButton(menuStart, startMusic, isStartMenu, isStartGame);
+
         window.clear(sf::Color::Black);
         
         if(isStartMenu && menuStart != nullptr){
@@ -67,8 +66,8 @@ int main(){
         }
 
         if(isStartGame){
-            window.draw(box2);
-            start.PlayerDeclaration(window, box);
+            gr.Object(window, ground1);
+            py.PlayerDeclaration(window, box);
         }
         window.display();
     }
@@ -78,4 +77,26 @@ int main(){
         menuStart = nullptr;
     }
     return 0;
+}
+
+void settingsButton(MenuS *&menuStart, bool &isSettingsMenu, bool &isStartMenu){
+   if(sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::R)){
+        isStartMenu = false;
+        isSettingsMenu = true;
+
+        delete menuStart;
+        menuStart = nullptr;
+    }
+}
+
+void startButton(MenuS *&menuStart, sf::Music *startMusic, bool &isStartMenu, bool &isStartGame){
+   if(sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::E)){
+        isStartMenu = false;
+        isStartGame = true;
+
+        delete menuStart;
+        delete startMusic;
+        menuStart = nullptr;
+        startMusic = nullptr;
+    }
 }

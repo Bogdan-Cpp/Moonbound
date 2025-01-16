@@ -26,5 +26,8 @@
             "detail": "Compiling SFML project"
         }
     ],
-    "C_Cpp.errorSquiggles": "disabled"
+    "C_Cpp.errorSquiggles": "disabled",
+    "files.associations": {
+        "optional": "cpp"
+    }
 }
