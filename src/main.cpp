@@ -10,6 +10,7 @@ void settingsButton(MenuS *&menuStart, bool &isSettingsMenu, bool &isStartMenu);
 void startButton(MenuS *&menuStart, sf::Music *startMusic, bool &isStartMenu, bool &isStartGame);
 
 int main(){
+    
     //variabile generale
     bool isStartMenu = true;
     bool isStartGame = false;
