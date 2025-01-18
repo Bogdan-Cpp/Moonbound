@@ -1,26 +1,25 @@
 cmake_minimum_required(VERSION 3.10)
 project(Moonbound VERSION 1.0)
 
-set(CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 17)
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
+# Căutăm SFML automat folosind find_package
+find_package(SFML 2.5 REQUIRED COMPONENTS graphics window system audio network)
 
-include_directories("C:/Users/Bogdan/Documents/SFML/SFML-3.0.0/include")
-link_directories("C:/Users/Bogdan/Documents/SFML/SFML-3.0.0/lib")
+# Include directoarele de header SFML
+include_directories(${SFML_INCLUDE_DIR})
 
-set(SFML_DIR "C:/Users/Bogdan/Documents/SFML/SFML-3.0.0/lib/cmake/SFML")
-
+# Găsim fișierele sursă
 file(GLOB_RECURSE MY_SRC src/*.cpp)
+
+# Creăm executabilul
 add_executable(Moonbound ${MY_SRC})
 
+# Leagă-l cu bibliotecile necesare
 target_link_libraries(Moonbound
    sfml-graphics
    sfml-window
    sfml-system
    sfml-audio
    sfml-network
-   opengl32
-   winmm
-   gdi32
-   user32
 )
