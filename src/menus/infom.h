@@ -6,16 +6,16 @@
 
 class Info{
     public:
-    void infoButton(MenuS *&menuStart, bool &isStartMenu, bool &isInfoMenu, bool &isSettingsMenu, bool &canPressButton){
+    void infoButton(MenuS &menuStart, bool &isStartMenu, bool &isInfoButton, bool &canPressButton){
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::T) && canPressButton){
             isStartMenu = false;
-            isSettingsMenu = false;
-            isInfoMenu = true;
+            isInfoButton = true;
+        }
 
-            delete menuStart;
-            menuStart = nullptr;
-
-            canPressButton = false;
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !canPressButton){
+            isInfoButton = false;
+            isStartMenu = true;
+            canPressButton = true;
         }
     }
     

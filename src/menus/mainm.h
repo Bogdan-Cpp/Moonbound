@@ -16,17 +16,12 @@ class MenuS{
     start.setPosition(sf::Vector2f(150.f, 600.f));
     start.setFillColor(sf::Color::White);
 
-    sf::Text settings("Settings(r)", fStart, 40); 
-    settings.setPosition(sf::Vector2f(150.f, 650.f));
-    settings.setFillColor(sf::Color::White);
-
     sf::Text info("Info(t)", fStart, 30); 
     info.setPosition(sf::Vector2f(150.f, 700.f));
     info.setFillColor(sf::Color::White);
 
     window.draw(title);
     window.draw(start);
-    window.draw(settings);
     window.draw(info);
   }
 };

@@ -4,7 +4,6 @@
 #include <optional>
 
 #include "menus/mainm.h"
-#include "menus/settingsm.h"
 #include "menus/infom.h"
 #include "menus/startm.h"
 
@@ -15,7 +14,6 @@ int main(){
     //variabile generale
     bool isStartMenu = true;
     bool isStartGame = false;
-    bool isSettingsMenu = false;
     bool isInfoButton = false;
     bool canPressButton = true;
 
@@ -25,8 +23,8 @@ int main(){
     //class apelation
     Start sr;
     Info in;
-    Settings st;
-    MenuS *menuStart = new MenuS();
+    MenuS menuStart;
+    
     Player py;
     Ground gr;
     sf::Image image;
@@ -63,21 +61,19 @@ int main(){
         }
 
         //function
-        st.settingsButton(menuStart, isSettingsMenu, isStartMenu, isInfoButton, canPressButton);
-        in.infoButton(menuStart, isSettingsMenu, isInfoButton, isSettingsMenu, canPressButton);
-        sr.startButton(menuStart, startMusic, isStartMenu, isStartGame, isSettingsMenu, isInfoButton, canPressButton);
+        in.infoButton(menuStart, isStartMenu, isInfoButton, canPressButton);
+        sr.startButton(menuStart, startMusic, isStartMenu, isStartGame, isInfoButton, canPressButton);
 
         window.clear(sf::Color::Black);
 
-        if(isStartMenu && menuStart != nullptr){
-            menuStart->startMenu(window, fStart);
+        if(isStartMenu){
+            menuStart.startMenu(window, fStart);
         }
         if(isStartGame){
             gr.Object(window, ground1);
             py.PlayerDeclaration(window, box);
-        }
-        if(isSettingsMenu){
-            st.settingsMenuDraw(window, fStart);
+            isStartMenu = false;
+            isInfoButton = false;
         }
         if(isInfoButton){
             in.infoMenuDraw(window, fStart);
