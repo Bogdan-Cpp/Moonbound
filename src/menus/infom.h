@@ -11,10 +11,17 @@ class Info{
         isStartMenu = false;
 
         delete ms;
-
         ms = nullptr;
-
         in = new Info();
+    }
+
+    void infoMenuQuit(Info *&in, MenuS *&ms, bool &isInfoMenu, bool &isStartMenu){
+        isInfoMenu = false;
+        isStartMenu = true;
+
+        delete in;
+        in = nullptr;
+        ms = new MenuS();
     }
 
     void infoMenuDraw(sf::RenderWindow& window, sf::Font fStart){
