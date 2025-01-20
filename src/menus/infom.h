@@ -6,21 +6,19 @@
 
 class Info{
     public:
-    void infoButton(MenuS &menuStart, bool &isStartMenu, bool &isInfoButton, bool &canPressButton){
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::T) && canPressButton){
-            isStartMenu = false;
-            isInfoButton = true;
-        }
+    void infoMenuButton(Info *&in, MenuS *&ms, bool &isInfoMenu, bool &isStartMenu){
+        isInfoMenu = true;
+        isStartMenu = false;
 
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !canPressButton){
-            isInfoButton = false;
-            isStartMenu = true;
-            canPressButton = true;
-        }
+        delete ms;
+
+        ms = nullptr;
+
+        in = new Info();
     }
-    
+
     void infoMenuDraw(sf::RenderWindow& window, sf::Font fStart){
-        sf::Text info("in working...", fStart, 50);
+        sf::Text info("info menu", fStart, 50);
 
         info.setFillColor(sf::Color::White);
         info.setPosition(sf::Vector2f(500.f, 500.f));

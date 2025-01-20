@@ -11,20 +11,23 @@
 #include "map/ground.h"
 
 int main(){
-    //variabile generale
     bool isStartMenu = true;
-    bool isStartGame = false;
-    bool isInfoButton = false;
-    bool canPressButton = true;
+    bool isGameMenu = false;
+    bool isInfoMenu = false;
 
     auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "Moonbound");
     window.setFramerateLimit(60);
 
     //class apelation
-    Start sr;
-    Info in;
-    MenuS menuStart;
+    Start *sr = new Start();
+    Info *in = new Info();
+    MenuS *ms = new MenuS();
     
+    delete sr;
+    delete in;
+    sr = nullptr;
+    in = nullptr;
+
     Player py;
     Ground gr;
     sf::Image image;
@@ -53,33 +56,27 @@ int main(){
                 window.close();
             }
         }
-        
-        if(isStartGame){
-            py.PlayerMove(box);
-            camera.setCenter(box.getPosition());
-            window.setView(camera);
-        }
 
-        //function
-        in.infoButton(menuStart, isStartMenu, isInfoButton, canPressButton);
-        sr.startButton(menuStart, startMusic, isStartMenu, isStartGame, isInfoButton, canPressButton);
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::E) && isStartMenu){sr->startMenuButton(startMusic, sr, ms, isStartMenu, isGameMenu);}
+        else if(sf::Keyboard::isKeyPressed(sf::Keyboard::I) && isStartMenu){in->infoMenuButton(in, ms, isInfoMenu, isStartMenu);}
 
+        //draw
         window.clear(sf::Color::Black);
 
-        if(isStartMenu){
-            menuStart.startMenu(window, fStart);
+        if(isStartMenu && ms != nullptr){
+            ms->startMenu(window, fStart);
         }
-        if(isStartGame){
-            gr.Object(window, ground1);
-            py.PlayerDeclaration(window, box);
-            isStartMenu = false;
-            isInfoButton = false;
+        
+        else if(isGameMenu && sr != nullptr){
+            sr->startMenuDraw(window, fStart);
         }
-        if(isInfoButton){
-            in.infoMenuDraw(window, fStart);
-        } 
+
+        else if(isInfoMenu && in != nullptr){
+            in->infoMenuDraw(window, fStart);
+        }
 
         window.display();
     }
+    
     return 0;
 }

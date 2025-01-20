@@ -6,15 +6,25 @@
 
 class Start{
     public:
-    void startButton(MenuS &menuStart, sf::Music *&startMusic, bool &isStartMenu, bool &isStartGame, bool &isInfoButton, bool &canPressButton){
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::E) && canPressButton){
-            isStartMenu = false;
-            isInfoButton = false;
-            isStartGame = true;
-            canPressButton = false;
-        
-            delete startMusic;
-            startMusic = nullptr;
-        }
+    void startMenuButton(sf::Music *&startMusic, Start *&sr, MenuS *&ms, bool &isStartMenu, bool &isGameMenu){
+        isStartMenu = false;
+        isGameMenu = true;
+
+        delete startMusic;
+        delete ms;
+
+        startMusic = nullptr;
+        ms = nullptr;
+
+        sr = new Start();
+    }
+
+    void startMenuDraw(sf::RenderWindow& window, sf::Font fStart){
+        sf::Text info("start Menu", fStart, 50);
+
+        info.setFillColor(sf::Color::White);
+        info.setPosition(sf::Vector2f(500.f, 500.f));
+
+        window.draw(info);
     }
 };
