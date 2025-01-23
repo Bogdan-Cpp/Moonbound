@@ -20,6 +20,6 @@ target_link_libraries(Moonbound
    sfml-graphics
    sfml-window
    sfml-system
-   sfml-audio
+   sfml-audio 
    sfml-network
 )

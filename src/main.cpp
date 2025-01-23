@@ -8,7 +8,6 @@
 #include "menus/startm.h"
 
 #include "player.h"
-#include "map/ground.h"
 
 int main(){
     bool isStartMenu = true;
@@ -29,17 +28,16 @@ int main(){
     in = nullptr;
 
     Player py;
-    Ground gr;
     sf::Image image;
     sf::Font fStart;
-    sf::RectangleShape box;
-    sf::RectangleShape ground1;
+    sf::RectangleShape player;
+    sf::RectangleShape floor1;
     sf::View camera(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920.f, 1080.f)));
     
     sf::Music *startMusic = new sf::Music();
 
     //function declaration
-    py.PlayerBuild(box);
+    py.PlayerBuild(player);
     
     //file verification
     if(!fStart.loadFromFile("../assets/startFont.ttf")){return -1;}
@@ -48,6 +46,7 @@ int main(){
 
     window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
     startMusic->play();
+    py.PlayerBuild(player);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -60,7 +59,14 @@ int main(){
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::E) && isStartMenu){sr->startMenuButton(startMusic, sr, ms, isStartMenu, isGameMenu);}
         else if(sf::Keyboard::isKeyPressed(sf::Keyboard::I) && isStartMenu){in->infoMenuButton(in, ms, isInfoMenu, isStartMenu);}
         else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !isStartMenu && isInfoMenu){in->infoMenuQuit(in, ms, isInfoMenu, isStartMenu);}
-
+        
+        if(isGameMenu){
+            camera.setCenter(player.getPosition().x + 250.f, player.getPosition().y);
+            window.setView(camera);
+            sr->ObjectPosition(floor1);
+            py.PlayerMove(player);
+        }
+        
         //draw
         window.clear(sf::Color::Black);
 
@@ -69,7 +75,7 @@ int main(){
         }
         
         else if(isGameMenu && sr != nullptr){
-            sr->startMenuDraw(window, fStart);
+            sr->ObjectDraw(window, floor1, player);
         }
 
         else if(isInfoMenu && in != nullptr){

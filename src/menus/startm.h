@@ -19,12 +19,14 @@ class Start{
         sr = new Start();
     }
 
-    void startMenuDraw(sf::RenderWindow& window, sf::Font fStart){
-        sf::Text info("start Menu", fStart, 50);
+    void ObjectPosition(sf::RectangleShape &floor1){
+        floor1.setFillColor(sf::Color::White);
+        floor1.setSize(sf::Vector2f(500.f, 50.f));
+        floor1.setPosition(sf::Vector2f(800.f, 800.f));
+    }
 
-        info.setFillColor(sf::Color::White);
-        info.setPosition(sf::Vector2f(500.f, 500.f));
-
-        window.draw(info);
+    void ObjectDraw(sf::RenderWindow& window, sf::RectangleShape &floor1, sf::RectangleShape &player){
+        window.draw(floor1);
+        window.draw(player);
     }
 };
