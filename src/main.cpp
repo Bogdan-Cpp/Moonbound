@@ -38,6 +38,8 @@ int main(){
 
     //function declaration
     py.PlayerBuild(player);
+
+    float yPoz = player.getPosition().y;
     
     //file verification
     if(!fStart.loadFromFile("../assets/startFont.ttf")){return -1;}
@@ -61,7 +63,7 @@ int main(){
         else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !isStartMenu && isInfoMenu){in->infoMenuQuit(in, ms, isInfoMenu, isStartMenu);}
         
         if(isGameMenu){
-            camera.setCenter(player.getPosition().x + 250.f, player.getPosition().y);
+            camera.setCenter(player.getPosition().x + 250, yPoz);
             window.setView(camera);
             sr->ObjectPosition(floor1);
             py.PlayerMove(player);
