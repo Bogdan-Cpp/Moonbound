@@ -9,6 +9,8 @@
 
 #include "player.h"
 
+#include "obstacles/Ssd.h"
+
 int main(){
     bool isStartMenu = true;
     bool isGameMenu = false;
@@ -32,8 +34,11 @@ int main(){
     sf::Font fStart;
     sf::RectangleShape player;
     sf::RectangleShape floor1;
+    sf::RectangleShape ssd;
     sf::View camera(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920.f, 1080.f)));
     
+    Ssd storage(ssd, 500.f, 300.f);
+
     sf::Music *startMusic = new sf::Music();
 
     //function declaration
@@ -78,6 +83,7 @@ int main(){
         
         else if(isGameMenu && sr != nullptr){
             sr->ObjectDraw(window, floor1, player);
+            window.draw(ssd);
         }
 
         else if(isInfoMenu && in != nullptr){
