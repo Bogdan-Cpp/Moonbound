@@ -32,7 +32,7 @@ class Player{
         player.move(0.f, -jumpSpeed); 
         jumpSpeed += gravity;
 
-        if(player.getPosition().y >= groundLevel) {
+         if(player.getPosition().y >= groundLevel) {
             player.setPosition(player.getPosition().x, groundLevel);
             isJumping = false; 
             jumpSpeed = 0.f;

@@ -6,17 +6,20 @@
 
 class Ssd{
     public:
-    float l = 100.f;
-    float L = 100.f;
+    sf::RectangleShape ssd;
     float xPoz;
     float yPoz;
-
-    Ssd(sf::RectangleShape &ssd, float xPoz, float yPoz){
+    
+    Ssd(float xPoz, float yPoz){
         this->xPoz = xPoz;
         this->yPoz = yPoz;
 
         ssd.setFillColor(sf::Color::Green);
-        ssd.setSize(sf::Vector2f(l, L));
+        ssd.setSize(sf::Vector2f(20.f, 40.f));
         ssd.setPosition(sf::Vector2f(xPoz, yPoz));
+    }
+
+    void drawSsd(sf::RenderWindow& window){
+        window.draw(ssd);
     }
 };

@@ -7,9 +7,9 @@
 #include "menus/infom.h"
 #include "menus/startm.h"
 
-#include "player.h"
-
 #include "obstacles/Ssd.h"
+
+#include "player.h"
 
 int main(){
     bool isStartMenu = true;
@@ -34,13 +34,13 @@ int main(){
     sf::Font fStart;
     sf::RectangleShape player;
     sf::RectangleShape floor1;
-    sf::RectangleShape ssd;
     sf::View camera(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920.f, 1080.f)));
-    
-    Ssd storage(ssd, 500.f, 300.f);
-
     sf::Music *startMusic = new sf::Music();
-
+    
+    Ssd storage1(1000.f, 1960.f);
+    Ssd storage2(1300.f, 1960.f);
+    Ssd storage3(1800.f, 1960.f);
+    Ssd storage4(2300.f, 1960.f);
     //function declaration
     py.PlayerBuild(player);
 
@@ -83,7 +83,10 @@ int main(){
         
         else if(isGameMenu && sr != nullptr){
             sr->ObjectDraw(window, floor1, player);
-            window.draw(ssd);
+            storage1.drawSsd(window);
+            storage2.drawSsd(window);
+            storage3.drawSsd(window);
+            storage4.drawSsd(window);
         }
 
         else if(isInfoMenu && in != nullptr){
