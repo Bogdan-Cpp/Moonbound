@@ -2,6 +2,7 @@
 #include <SFML/Audio.hpp>
 #include <iostream>
 #include <optional>
+#include <vector>
 
 #include "menus/mainm.h"
 #include "menus/infom.h"
@@ -18,6 +19,7 @@ int main(){
 
     auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "Moonbound");
     window.setFramerateLimit(60);
+    window.setVerticalSyncEnabled(true);
 
     //class apelation
     Start *sr = new Start();
@@ -37,10 +39,22 @@ int main(){
     sf::View camera(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920.f, 1080.f)));
     sf::Music *startMusic = new sf::Music();
     
-    Ssd storage1(1000.f, 1960.f);
-    Ssd storage2(1300.f, 1960.f);
-    Ssd storage3(1800.f, 1960.f);
-    Ssd storage4(2300.f, 1960.f);
+    std::vector<Ssd> storage = {
+        Ssd(1000.f, 1960.f),
+        Ssd(1400.f, 1960.f),
+        Ssd(1900.f, 1960.f),
+        Ssd(2300.f, 1960.f),
+        Ssd(2600.f, 1960.f),
+        Ssd(2800.f, 1960.f),
+        Ssd(3000.f, 1960.f),
+        Ssd(3200.f, 1960.f),
+        //level 2
+        Ssd(4000.f, 1960.f),
+        Ssd(4300.f, 1960.f),
+        Ssd(4500.f, 1960.f),
+        Ssd(4700.f, 1960.f)
+    };
+    
     //function declaration
     py.PlayerBuild(player);
 
@@ -62,6 +76,7 @@ int main(){
                 window.close();
             }
         }
+        float getX = player.getPosition().x;
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::E) && isStartMenu){sr->startMenuButton(startMusic, sr, ms, isStartMenu, isGameMenu);}
         else if(sf::Keyboard::isKeyPressed(sf::Keyboard::I) && isStartMenu){in->infoMenuButton(in, ms, isInfoMenu, isStartMenu);}
@@ -72,6 +87,13 @@ int main(){
             window.setView(camera);
             sr->ObjectPosition(floor1);
             py.PlayerMove(player);
+
+            for(auto &stor : storage){
+                stor.ssdColide(player, sr, isGameMenu);
+            }
+            if(getX > 3400){
+                py.speed = 5;
+            }
         }
         
         //draw
@@ -83,10 +105,10 @@ int main(){
         
         else if(isGameMenu && sr != nullptr){
             sr->ObjectDraw(window, floor1, player);
-            storage1.drawSsd(window);
-            storage2.drawSsd(window);
-            storage3.drawSsd(window);
-            storage4.drawSsd(window);
+            for(auto &storages : storage){
+                storages.drawSsd(window);
+            }
+            sr->Scor(fStart, window, getX);
         }
 
         else if(isInfoMenu && in != nullptr){

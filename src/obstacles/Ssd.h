@@ -22,4 +22,16 @@ class Ssd{
     void drawSsd(sf::RenderWindow& window){
         window.draw(ssd);
     }
-};
+
+    void ssdColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu){
+        if(player.getGlobalBounds().intersects(ssd.getGlobalBounds())){
+            isGameMenu = false;
+            delete sr;
+            sr = nullptr;
+            
+            player.setPosition(sf::Vector2f(100.f, 1950.f));
+            sr = new Start();
+            isGameMenu = true;
+        }
+    }
+}
