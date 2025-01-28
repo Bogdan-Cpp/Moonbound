@@ -31,12 +31,21 @@ class Start{
         window.draw(player);
     }
 
-    void Scor(sf::Font fStart, sf::RenderWindow& window, float getX){
-        int scorG = getX / 2;
-        sf::Text scor("Scor " + std::to_string(scorG), fStart, 40);
+    void Scor(sf::Font fStart, sf::RenderWindow &window, float &getX, long long &count, long long &prev, long long &best){
+        sf::Text scor("Scor " + std::to_string(count), fStart, 40);
         scor.setFillColor(sf::Color::White);
         scor.setPosition(sf::Vector2f(getX + 100, 1400.f));
 
+        sf::Text prevScor("Preveous: " + std::to_string(prev), fStart, 40);
+        prevScor.setFillColor(sf::Color::White);
+        prevScor.setPosition(sf::Vector2f(100, 1920.f));
+        
+        sf::Text bestScor("Best: " + std::to_string(best), fStart, 40);
+        bestScor.setFillColor(sf::Color::White);
+        bestScor.setPosition(sf::Vector2f(550, 1920.f));
+        
         window.draw(scor);
+        window.draw(prevScor);
+        window.draw(bestScor);
     }
 };

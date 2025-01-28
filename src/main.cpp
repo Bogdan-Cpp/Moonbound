@@ -3,19 +3,19 @@
 #include <iostream>
 #include <optional>
 #include <vector>
-
 #include "menus/mainm.h"
 #include "menus/infom.h"
 #include "menus/startm.h"
-
-#include "obstacles/Ssd.h"
-
+#include "Ssd.h"
 #include "player.h"
 
 int main(){
     bool isStartMenu = true;
     bool isGameMenu = false;
     bool isInfoMenu = false;
+    long long count = 0;
+    long long prev = 0;
+    long long best = 0;
 
     auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "Moonbound");
     window.setFramerateLimit(60);
@@ -30,7 +30,7 @@ int main(){
     delete in;
     sr = nullptr;
     in = nullptr;
-
+    
     Player py;
     sf::Image image;
     sf::Font fStart;
@@ -64,7 +64,7 @@ int main(){
     if(!fStart.loadFromFile("../assets/startFont.ttf")){return -1;}
     if(!startMusic->openFromFile("../assets/music.ogg")){return -1;}
     if(!image.loadFromFile("../assets/gameIcon.png")){return -1;}
-
+    
     window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
     startMusic->play();
     py.PlayerBuild(player);
@@ -76,6 +76,7 @@ int main(){
                 window.close();
             }
         }
+        count += 1;
         float getX = player.getPosition().x;
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::E) && isStartMenu){sr->startMenuButton(startMusic, sr, ms, isStartMenu, isGameMenu);}
@@ -89,10 +90,13 @@ int main(){
             py.PlayerMove(player);
 
             for(auto &stor : storage){
-                stor.ssdColide(player, sr, isGameMenu);
+                stor.ssdColide(player, sr, isGameMenu, count, prev, best);
             }
-            if(getX > 3400){
-                py.speed = 5;
+            if(getX >= 3400){
+                py.speed = 6;
+            }
+            else{
+                py.speed = 5.f;
             }
         }
         
@@ -104,11 +108,11 @@ int main(){
         }
         
         else if(isGameMenu && sr != nullptr){
+            sr->Scor(fStart, window, getX, count, prev, best);
             sr->ObjectDraw(window, floor1, player);
             for(auto &storages : storage){
                 storages.drawSsd(window);
             }
-            sr->Scor(fStart, window, getX);
         }
 
         else if(isInfoMenu && in != nullptr){

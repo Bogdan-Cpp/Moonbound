@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <optional>
 #include <iostream>
+#include "player.h"
 
 class Ssd{
     public:
@@ -23,15 +24,21 @@ class Ssd{
         window.draw(ssd);
     }
 
-    void ssdColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu){
+    void ssdColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best){
         if(player.getGlobalBounds().intersects(ssd.getGlobalBounds())){
             isGameMenu = false;
             delete sr;
             sr = nullptr;
+
+            prev = count;
+            if(count > best){
+                best = count;
+            }
             
             player.setPosition(sf::Vector2f(100.f, 1950.f));
             sr = new Start();
             isGameMenu = true;
+            count = 0;
         }
     }
-}
+};
