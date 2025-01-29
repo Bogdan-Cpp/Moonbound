@@ -120,16 +120,53 @@ int main(){
 }
 
 void obstacleAlgorithm(std::vector<Ssd> &storage, int &x){\
-    int prev = 1000;
+    int prev = 0;
+    int random = x;
+    int level1;
+
     for(int i = 0; i <= 100; i++){
-        storage.push_back(Ssd(x, 1960));
+        storage.push_back(Ssd(random, 1960));
+        if(x < 100000){
+            level1 = std::rand() % 4;
 
-        int random = (std::rand() % length) + 1000;
-        x = random;
-        prev = random;
+            switch(level1){
+               case 0:
+                prev = x;
+                x = random;
+                prev += 200;
+                x += 300;
+                break;
+               
+               case 1:
+                prev = x;
+                x = random;
+                prev += 250;
+                x += 400;
+                break;
 
-        if(x == prev){
-            x += 300;
+               case 2:
+                prev = x;
+                x = random;
+                prev += 100;
+                x += 200;
+                break;
+               
+               case 3:
+                prev = x;
+                x = random;
+                prev += 400;
+                x += 200;
+                break;
+
+               case 4:
+                prev = x;
+                x = random;
+                prev += 100;
+                x += 450;
+                break;
+            }
         }
+        
+        random = prev + (std::rand() % (x - prev + 1));
     }
 }
