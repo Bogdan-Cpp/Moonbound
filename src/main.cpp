@@ -3,11 +3,16 @@
 #include <iostream>
 #include <optional>
 #include <vector>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
 #include "menus/mainm.h"
 #include "menus/infom.h"
 #include "menus/startm.h"
 #include "Ssd.h"
 #include "player.h"
+
+void obstacleAlgorithm(std::vector<Ssd> &storage, int &x);
 
 int main(){
     bool isStartMenu = true;
@@ -38,22 +43,11 @@ int main(){
     sf::RectangleShape floor1;
     sf::View camera(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920.f, 1080.f)));
     sf::Music *startMusic = new sf::Music();
-    
-    std::vector<Ssd> storage = {
-        Ssd(1000.f, 1960.f),
-        Ssd(1400.f, 1960.f),
-        Ssd(1900.f, 1960.f),
-        Ssd(2300.f, 1960.f),
-        Ssd(2600.f, 1960.f),
-        Ssd(2800.f, 1960.f),
-        Ssd(3000.f, 1960.f),
-        Ssd(3200.f, 1960.f),
-        //level 2
-        Ssd(4000.f, 1960.f),
-        Ssd(4300.f, 1960.f),
-        Ssd(4500.f, 1960.f),
-        Ssd(4700.f, 1960.f)
-    };
+    int x = 1000;
+    std::vector<Ssd> storage;
+    std::srand(std::time(nullptr));
+   
+    obstacleAlgorithm(storage, x);
     
     //function declaration
     py.PlayerBuild(player);
@@ -76,7 +70,6 @@ int main(){
                 window.close();
             }
         }
-        count += 1;
         float getX = player.getPosition().x;
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::E) && isStartMenu){sr->startMenuButton(startMusic, sr, ms, isStartMenu, isGameMenu);}
@@ -84,6 +77,7 @@ int main(){
         else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !isStartMenu && isInfoMenu){in->infoMenuQuit(in, ms, isInfoMenu, isStartMenu);}
         
         if(isGameMenu){
+            count += 1;
             camera.setCenter(player.getPosition().x + 250, yPoz);
             window.setView(camera);
             sr->ObjectPosition(floor1);
@@ -93,7 +87,7 @@ int main(){
                 stor.ssdColide(player, sr, isGameMenu, count, prev, best);
             }
             if(getX >= 3400){
-                py.speed = 6;
+                py.speed = 6.f;
             }
             else{
                 py.speed = 5.f;
@@ -123,4 +117,19 @@ int main(){
     }
     
     return 0;
+}
+
+void obstacleAlgorithm(std::vector<Ssd> &storage, int &x){\
+    int prev = 1000;
+    for(int i = 0; i <= 100; i++){
+        storage.push_back(Ssd(x, 1960));
+
+        int random = (std::rand() % length) + 1000;
+        x = random;
+        prev = random;
+
+        if(x == prev){
+            x += 300;
+        }
+    }
 }
