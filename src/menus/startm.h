@@ -7,6 +7,7 @@
 
 class Start{
     public:
+    
     void startMenuButton(sf::Music *&startMusic, Start *&sr, MenuS *&ms, bool &isStartMenu, bool &isGameMenu){
         isStartMenu = false;
         isGameMenu = true;

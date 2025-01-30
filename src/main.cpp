@@ -34,6 +34,7 @@ int main(){
     Info *in = new Info();
     MenuS *ms = new MenuS();
     Pause *pa = new Pause();
+    sf::Music gameMusic;
     
     delete sr;
     delete in;
@@ -45,6 +46,7 @@ int main(){
     Player py;
     sf::Image image;
     sf::Font fStart;
+    sf::Font fPause;
     sf::RectangleShape player;
     sf::RectangleShape floor1;
     sf::View camera(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920.f, 1080.f)));
@@ -62,7 +64,9 @@ int main(){
     
     //file verification
     if(!fStart.loadFromFile("../assets/startFont.ttf")){return -1;}
+    if(!fPause.loadFromFile("../assets/pauseFont.ttf")){return -1;}
     if(!startMusic->openFromFile("../assets/music.ogg")){return -1;}
+    if(!gameMusic.openFromFile("../assets/gameMusic.ogg")){return -1;}
     if(!image.loadFromFile("../assets/gameIcon.png")){return -1;}
     
     window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
@@ -88,9 +92,7 @@ int main(){
             sr->ObjectPosition(floor1);
             py.PlayerMove(player);
 
-            if(!isPauseMenu){
-                count += 1;
-            }
+            if(!isPauseMenu){count += 1;}
 
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
                 isPauseMenu = true;
@@ -108,6 +110,10 @@ int main(){
             for(auto &stor : storage){
                 stor.ssdColide(player, sr, isGameMenu, count, prev, best);
             }
+            
+            if(gameMusic.getStatus() != sf::Music::Playing){
+                gameMusic.play();
+            }
         }
         
         //draw
@@ -124,7 +130,7 @@ int main(){
                 storages.drawSsd(window);
             }
             if(isPauseMenu){
-                pa->drawPause(fStart, window, getX);
+                pa->drawPause(fPause, window, getX);
             }
         }
 
@@ -142,7 +148,7 @@ void obstacleAlgorithm(std::vector<Ssd> &storage, int &x){\
     int prev = 0;
     int random = x;
     int level1;
-
+    //at poz.x 30.000
     for(int i = 0; i <= 100; i++){
         storage.push_back(Ssd(random, 1960));
         if(x < 100000){
