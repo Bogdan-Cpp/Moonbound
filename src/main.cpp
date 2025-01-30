@@ -11,6 +11,7 @@
 #include "menus/startm.h"
 #include "Ssd.h"
 #include "player.h"
+#include "pausem.h"
 
 void obstacleAlgorithm(std::vector<Ssd> &storage, int &x);
 
@@ -18,6 +19,8 @@ int main(){
     bool isStartMenu = true;
     bool isGameMenu = false;
     bool isInfoMenu = false;
+    bool isPauseMenu = false;
+
     long long count = 0;
     long long prev = 0;
     long long best = 0;
@@ -30,11 +33,14 @@ int main(){
     Start *sr = new Start();
     Info *in = new Info();
     MenuS *ms = new MenuS();
+    Pause *pa = new Pause();
     
     delete sr;
     delete in;
+    delete pa;
     sr = nullptr;
     in = nullptr;
+    pa = nullptr;
     
     Player py;
     sf::Image image;
@@ -77,20 +83,30 @@ int main(){
         else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !isStartMenu && isInfoMenu){in->infoMenuQuit(in, ms, isInfoMenu, isStartMenu);}
         
         if(isGameMenu){
-            count += 1;
             camera.setCenter(player.getPosition().x + 250, yPoz);
             window.setView(camera);
             sr->ObjectPosition(floor1);
             py.PlayerMove(player);
 
+            if(!isPauseMenu){
+                count += 1;
+            }
+
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
+                isPauseMenu = true;
+                pa = new Pause();
+                py.speed = 0.f;
+            }
+
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Z) && isPauseMenu){
+                isPauseMenu = false;
+                delete pa;
+                pa = nullptr;
+                py.speed = 5.f;
+            }
+
             for(auto &stor : storage){
                 stor.ssdColide(player, sr, isGameMenu, count, prev, best);
-            }
-            if(getX >= 3400){
-                py.speed = 6.f;
-            }
-            else{
-                py.speed = 5.f;
             }
         }
         
@@ -106,6 +122,9 @@ int main(){
             sr->ObjectDraw(window, floor1, player);
             for(auto &storages : storage){
                 storages.drawSsd(window);
+            }
+            if(isPauseMenu){
+                pa->drawPause(fStart, window, getX);
             }
         }
 
@@ -127,46 +146,39 @@ void obstacleAlgorithm(std::vector<Ssd> &storage, int &x){\
     for(int i = 0; i <= 100; i++){
         storage.push_back(Ssd(random, 1960));
         if(x < 100000){
-            level1 = std::rand() % 4;
+            level1 = std::rand() % 5;
+            prev = x;
+            x = random;
 
             switch(level1){
                case 0:
-                prev = x;
-                x = random;
                 prev += 200;
                 x += 300;
                 break;
                
                case 1:
-                prev = x;
-                x = random;
                 prev += 250;
                 x += 400;
                 break;
 
                case 2:
-                prev = x;
-                x = random;
                 prev += 100;
                 x += 200;
                 break;
                
                case 3:
-                prev = x;
-                x = random;
                 prev += 400;
                 x += 200;
                 break;
 
                case 4:
-                prev = x;
-                x = random;
                 prev += 100;
                 x += 450;
                 break;
             }
+
+            if(x > prev){random = prev + (std::rand() % (x - prev + 1));}
+            else{random = prev;}
         }
-        
-        random = prev + (std::rand() % (x - prev + 1));
     }
 }
