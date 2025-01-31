@@ -16,7 +16,7 @@ class MenuS{
     start.setPosition(sf::Vector2f(150.f, 600.f));
     start.setFillColor(sf::Color::White);
 
-    sf::Text info("Info(t)", fStart, 30); 
+    sf::Text info("Info(i)", fStart, 30); 
     info.setPosition(sf::Vector2f(150.f, 650.f));
     info.setFillColor(sf::Color::White);
 
