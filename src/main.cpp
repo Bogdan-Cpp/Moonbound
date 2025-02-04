@@ -13,7 +13,7 @@
 #include "player.h"
 #include "pausem.h"
 
-void obstacleAlgorithm(std::vector<Ssd> &storage, int &x);
+void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture);
 
 int main(){
     bool isStartMenu = true;
@@ -51,11 +51,12 @@ int main(){
     sf::RectangleShape floor1;
     sf::View camera(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920.f, 1080.f)));
     sf::Music *startMusic = new sf::Music();
+    sf::Texture ssdTexture;
     int x = 1000;
     std::vector<Ssd> storage;
     std::srand(std::time(nullptr));
    
-    obstacleAlgorithm(storage, x);
+    obstacleAlgorithm(storage, x, ssdTexture);
     
     //function declaration
     py.PlayerBuild(player);
@@ -144,13 +145,13 @@ int main(){
     return 0;
 }
 
-void obstacleAlgorithm(std::vector<Ssd> &storage, int &x){\
+void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture){\
     int prev = 0;
     int random = x;
     int level1;
     //at poz.x 30.000
     for(int i = 0; i <= 100; i++){
-        storage.push_back(Ssd(random, 1960));
+        storage.push_back(Ssd(random, 1960, ssdTexture));
         if(x < 100000){
             level1 = std::rand() % 5;
             prev = x;

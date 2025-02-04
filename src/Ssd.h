@@ -7,16 +7,19 @@
 
 class Ssd{
     public:
-    sf::RectangleShape ssd;
+    sf::Sprite ssd;
     float xPoz;
     float yPoz;
     
-    Ssd(float xPoz, float yPoz){
+    Ssd(float xPoz, float yPoz, sf::Texture &ssdTexture){
         this->xPoz = xPoz;
         this->yPoz = yPoz;
 
-        ssd.setFillColor(sf::Color::Green);
-        ssd.setSize(sf::Vector2f(20.f, 40.f));
+        if(!ssdTexture.loadFromFile("../assets/ssd1.png")){
+            throw std::runtime_error("ssd texture was not found!");
+        }
+        this->ssd.setTexture(ssdTexture);
+        ssd.setScale(1.5f, 1.6f);
         ssd.setPosition(sf::Vector2f(xPoz, yPoz));
     }
 
