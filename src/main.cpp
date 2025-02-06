@@ -43,6 +43,8 @@ int main(){
     in = nullptr;
     pa = nullptr;
     
+    sf::Texture playerTexture;
+    sf::Sprite character;
     Player py;
     sf::Image image;
     sf::Font fStart;
@@ -57,8 +59,6 @@ int main(){
     std::srand(std::time(nullptr));
    
     obstacleAlgorithm(storage, x, ssdTexture);
-    
-    //function declaration
     py.PlayerBuild(player);
 
     float yPoz = player.getPosition().y;
@@ -69,10 +69,12 @@ int main(){
     if(!startMusic->openFromFile("../assets/music.ogg")){return -1;}
     if(!gameMusic.openFromFile("../assets/gameMusic.ogg")){return -1;}
     if(!image.loadFromFile("../assets/gameIcon.png")){return -1;}
+    if(!playerTexture.loadFromFile("../assets/player1.png")){return -1;}
     
     window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
     startMusic->play();
     py.PlayerBuild(player);
+    character.setTexture(playerTexture);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -82,6 +84,7 @@ int main(){
             }
         }
         float getX = player.getPosition().x;
+        float getY = player.getPosition().y;
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::E) && isStartMenu){sr->startMenuButton(startMusic, sr, ms, isStartMenu, isGameMenu);}
         else if(sf::Keyboard::isKeyPressed(sf::Keyboard::I) && isStartMenu){in->infoMenuButton(in, ms, isInfoMenu, isStartMenu);}
@@ -89,6 +92,8 @@ int main(){
         
         if(isGameMenu){
             camera.setCenter(player.getPosition().x + 250, yPoz);
+            character.setPosition(getX - 2.f, getY - 14.f);
+            character.setScale(2.f, 2.f);
             window.setView(camera);
             sr->ObjectPosition(floor1);
             py.PlayerMove(player);
@@ -127,6 +132,7 @@ int main(){
         else if(isGameMenu && sr != nullptr){
             sr->Scor(fStart, window, getX, count, prev, best);
             sr->ObjectDraw(window, floor1, player);
+            window.draw(character);
             for(auto &storages : storage){
                 storages.drawSsd(window);
             }
@@ -169,7 +175,7 @@ void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTextur
                 break;
 
                case 2:
-                prev += 100;
+                prev += 200;
                 x += 200;
                 break;
                
@@ -179,7 +185,7 @@ void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTextur
                 break;
 
                case 4:
-                prev += 100;
+                prev += 200;
                 x += 450;
                 break;
             }
