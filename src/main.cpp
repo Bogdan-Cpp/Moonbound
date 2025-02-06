@@ -44,6 +44,7 @@ int main(){
     pa = nullptr;
     
     sf::Texture playerTexture;
+    sf::Texture gpuTexture;
     sf::Sprite character;
     Player py;
     sf::Image image;
@@ -73,7 +74,6 @@ int main(){
     
     window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
     startMusic->play();
-    py.PlayerBuild(player);
     character.setTexture(playerTexture);
 
     while (window.isOpen()) {
@@ -165,28 +165,28 @@ void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTextur
 
             switch(level1){
                case 0:
-                prev += 200;
-                x += 300;
+                prev += 400;
+                x += 400;
                 break;
                
                case 1:
-                prev += 250;
+                prev += 400;
                 x += 400;
                 break;
 
                case 2:
-                prev += 200;
-                x += 200;
+                prev += 400;
+                x += 400;
                 break;
                
                case 3:
                 prev += 400;
-                x += 200;
+                x += 400;
                 break;
 
                case 4:
-                prev += 200;
-                x += 450;
+                prev += 400;
+                x += 400;
                 break;
             }
 
