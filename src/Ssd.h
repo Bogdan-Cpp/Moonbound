@@ -19,7 +19,7 @@ class Ssd{
             throw std::runtime_error("ssd texture was not found!");
         }
         this->ssd.setTexture(ssdTexture);
-        ssd.setScale(1.5f, 1.6f);
+        ssd.setScale(1.6f, 1.7f);
         ssd.setPosition(sf::Vector2f(xPoz, yPoz));
     }
 

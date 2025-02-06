@@ -19,7 +19,7 @@ class GPU{
             throw std::runtime_error("ssd texture was not found!");
         }
         this->gpu.setTexture(gpuTexture);
-        gpu.setScale(1.5f, 2f);
+        gpu.setScale(1.5f, 1.4f);
         gpu.setPosition(sf::Vector2f(xPoz, yPoz));
     }
 
@@ -28,7 +28,7 @@ class GPU{
     }
 
     void gpuColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best){
-        if(player.getGlobalBounds().intersects(ssd.getGlobalBounds())){
+        if(player.getGlobalBounds().intersects(gpu.getGlobalBounds())){
             isGameMenu = false;
             delete sr;
             sr = nullptr;

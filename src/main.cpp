@@ -12,8 +12,9 @@
 #include "Ssd.h"
 #include "player.h"
 #include "pausem.h"
+#include "graphicscard.h"
 
-void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture);
+void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics);
 
 int main(){
     bool isStartMenu = true;
@@ -57,9 +58,10 @@ int main(){
     sf::Texture ssdTexture;
     int x = 1000;
     std::vector<Ssd> storage;
+    std::vector<GPU> graphics;
     std::srand(std::time(nullptr));
    
-    obstacleAlgorithm(storage, x, ssdTexture);
+    obstacleAlgorithm(storage, x, ssdTexture, gpuTexture, graphics);
     py.PlayerBuild(player);
 
     float yPoz = player.getPosition().y;
@@ -93,7 +95,7 @@ int main(){
         if(isGameMenu){
             camera.setCenter(player.getPosition().x + 250, yPoz);
             character.setPosition(getX - 2.f, getY - 14.f);
-            character.setScale(2.f, 2.f);
+            character.setScale(1.7f, 1.9f);
             window.setView(camera);
             sr->ObjectPosition(floor1);
             py.PlayerMove(player);
@@ -116,6 +118,9 @@ int main(){
             for(auto &stor : storage){
                 stor.ssdColide(player, sr, isGameMenu, count, prev, best);
             }
+            for(auto &stor1 : graphics){
+                stor1.gpuColide(player, sr, isGameMenu, count, prev, best);
+            }
             
             if(gameMusic.getStatus() != sf::Music::Playing){
                 gameMusic.play();
@@ -136,6 +141,9 @@ int main(){
             for(auto &storages : storage){
                 storages.drawSsd(window);
             }
+            for(auto &graphic : graphics){
+                graphic.drawGpu(window);
+            }
             if(isPauseMenu){
                 pa->drawPause(fPause, window, getX);
             }
@@ -151,13 +159,23 @@ int main(){
     return 0;
 }
 
-void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture){\
+void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics){
     int prev = 0;
     int random = x;
     int level1;
+    int obstacle;
     //at poz.x 30.000
     for(int i = 0; i <= 100; i++){
-        storage.push_back(Ssd(random, 1960, ssdTexture));
+        obstacle = std::rand() % 3;
+
+        //choose an obstacle
+        if(obstacle == 1){
+            storage.push_back(Ssd(random, 1960, ssdTexture));
+        }
+        else if(obstacle == 2){
+            graphics.push_back(GPU(random, 1910, gpuTexture));
+        }
+
         if(x < 100000){
             level1 = std::rand() % 5;
             prev = x;
