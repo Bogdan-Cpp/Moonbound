@@ -16,8 +16,8 @@ class Player{
   float groundLevel = 1950.f;
   
    void PlayerBuild(sf::RectangleShape &player){
-      player.setFillColor(sf::Color::Blue);
-      player.setSize(sf::Vector2f(50.f, 50.f));
+      player.setFillColor(sf::Color::Black);
+      player.setSize(sf::Vector2f(55.f, 50.f));
       player.setPosition(sf::Vector2f(100.f, 1950.f));
    }
 
