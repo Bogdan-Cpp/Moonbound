@@ -19,7 +19,7 @@ class GPU{
             throw std::runtime_error("ssd texture was not found!");
         }
         this->gpu.setTexture(gpuTexture);
-        gpu.setScale(1.5f, 1.4f);
+        gpu.setScale(1.4f, 1.4f);
         gpu.setPosition(sf::Vector2f(xPoz, yPoz));
     }
 

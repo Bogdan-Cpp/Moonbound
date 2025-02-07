@@ -16,9 +16,20 @@ class Player{
   float groundLevel = 1950.f;
   
    void PlayerBuild(sf::RectangleShape &player){
-      player.setFillColor(sf::Color::Black);
-      player.setSize(sf::Vector2f(40.f, 40.f));
+      player.setFillColor(sf::Color(120, 120, 120));
+      player.setSize(sf::Vector2f(50.f, 50.f));
       player.setPosition(sf::Vector2f(100.f, 1950.f));
+   }
+
+   void playerCrouch(sf::RectangleShape &player){
+      if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)){
+         player.setSize(sf::Vector2f(25.f, 25.f));
+         player.setOrigin(0.f, -25.f);
+      }
+      else{
+         player.setSize(sf::Vector2f(50.f, 50.f));
+         player.setOrigin(0.f, 0.f);
+      }
    }
 
    void PlayerMove(sf::RectangleShape &player){

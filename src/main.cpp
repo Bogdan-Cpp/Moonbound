@@ -44,9 +44,7 @@ int main(){
     in = nullptr;
     pa = nullptr;
     
-    sf::Texture playerTexture;
     sf::Texture gpuTexture;
-    sf::Sprite character;
     Player py;
     sf::Image image;
     sf::Font fStart;
@@ -72,11 +70,9 @@ int main(){
     if(!startMusic->openFromFile("../assets/music.ogg")){return -1;}
     if(!gameMusic.openFromFile("../assets/gameMusic.ogg")){return -1;}
     if(!image.loadFromFile("../assets/gameIcon.png")){return -1;}
-    if(!playerTexture.loadFromFile("../assets/player1.png")){return -1;}
     
     window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
     startMusic->play();
-    character.setTexture(playerTexture);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -94,11 +90,10 @@ int main(){
         
         if(isGameMenu){
             camera.setCenter(player.getPosition().x + 250, yPoz);
-            character.setPosition(getX - 2.f, getY - 14.f);
-            character.setScale(1.7f, 1.9f);
             window.setView(camera);
             sr->ObjectPosition(floor1);
             py.PlayerMove(player);
+            py.playerCrouch(player);
 
             if(!isPauseMenu){count += 1;}
 
@@ -114,7 +109,7 @@ int main(){
                 pa = nullptr;
                 py.speed = 5.f;
             }
-
+            
             for(auto &stor : storage){
                 stor.ssdColide(player, sr, isGameMenu, count, prev, best);
             }
@@ -137,7 +132,6 @@ int main(){
         else if(isGameMenu && sr != nullptr){
             sr->Scor(fStart, window, getX, count, prev, best);
             sr->ObjectDraw(window, floor1, player);
-            window.draw(character);
             for(auto &storages : storage){
                 storages.drawSsd(window);
             }
@@ -184,22 +178,22 @@ void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTextur
             switch(level1){
                case 0:
                 prev += 400;
-                x += 400;
+                x += 350;
                 break;
                
                case 1:
                 prev += 400;
-                x += 400;
+                x += 310;
                 break;
 
                case 2:
                 prev += 400;
-                x += 400;
+                x += 370;
                 break;
                
                case 3:
                 prev += 400;
-                x += 400;
+                x += 300;
                 break;
 
                case 4:
