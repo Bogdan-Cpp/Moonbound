@@ -13,8 +13,9 @@
 #include "player.h"
 #include "pausem.h"
 #include "graphicscard.h"
+#include "procesor.h"
 
-void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics);
+void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics, sf::Texture &cpuTexture, std::vector<CPU> &centralUnit);
 
 int main(){
     bool isStartMenu = true;
@@ -44,6 +45,8 @@ int main(){
     in = nullptr;
     pa = nullptr;
     
+
+    sf::Texture cpuTexture;
     sf::Texture gpuTexture;
     Player py;
     sf::Image image;
@@ -57,9 +60,10 @@ int main(){
     int x = 1000;
     std::vector<Ssd> storage;
     std::vector<GPU> graphics;
+    std::vector<CPU> centralUnit;
     std::srand(std::time(nullptr));
    
-    obstacleAlgorithm(storage, x, ssdTexture, gpuTexture, graphics);
+    obstacleAlgorithm(storage, x, ssdTexture, gpuTexture, graphics, cpuTexture, centralUnit);
     py.PlayerBuild(player);
 
     float yPoz = player.getPosition().y;
@@ -116,6 +120,9 @@ int main(){
             for(auto &stor1 : graphics){
                 stor1.gpuColide(player, sr, isGameMenu, count, prev, best);
             }
+            for(auto &stor2 : centralUnit){
+                stor2.cpuColide(player, sr, isGameMenu, count, prev, best);
+            }
             
             if(gameMusic.getStatus() != sf::Music::Playing){
                 gameMusic.play();
@@ -138,6 +145,9 @@ int main(){
             for(auto &graphic : graphics){
                 graphic.drawGpu(window);
             }
+            for(auto &procesores : centralUnit){
+                procesores.drawCpu(window);
+            }
             if(isPauseMenu){
                 pa->drawPause(fPause, window, getX);
             }
@@ -153,14 +163,16 @@ int main(){
     return 0;
 }
 
-void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics){
+void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics, sf::Texture &cpuTexture, std::vector<CPU> &centralUnit){
     int prev = 0;
     int random = x;
     int level1;
     int obstacle;
+    int yRandom;
     //at poz.x 30.000
     for(int i = 0; i <= 100; i++){
         obstacle = std::rand() % 3;
+        yRandom = std::rand() % 3;
 
         //choose an obstacle
         if(obstacle == 1){
@@ -168,6 +180,21 @@ void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTextur
         }
         else if(obstacle == 2){
             graphics.push_back(GPU(random, 1910, gpuTexture));
+        }
+        else if(obstacle == 0){
+            switch(yRandom){
+                case 0:
+                centralUnit.push_back(CPU(random, 1945, cpuTexture));
+                break;
+
+                case 1:
+                centralUnit.push_back(CPU(random, 1920, cpuTexture));
+                break;
+
+                case 2:
+                centralUnit.push_back(CPU(random, 1890, cpuTexture));
+                break;
+            }
         }
 
         if(x < 100000){
