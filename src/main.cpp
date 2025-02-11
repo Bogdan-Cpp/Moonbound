@@ -15,20 +15,22 @@
 #include "graphicscard.h"
 #include "procesor.h"
 
-void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics, sf::Texture &cpuTexture, std::vector<CPU> &centralUnit);
+void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics, sf::Texture &cpuTexture, std::vector<CPU> &centralUnit, long long &count);
 
 int main(){
     bool isStartMenu = true;
     bool isGameMenu = false;
     bool isInfoMenu = false;
     bool isPauseMenu = false;
+    bool devMode = false;
 
     long long count = 0;
     long long prev = 0;
     long long best = 0;
+    float prevSpeed;
 
     auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "Moonbound");
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(120);
     window.setVerticalSyncEnabled(true);
 
     //class apelation
@@ -44,7 +46,6 @@ int main(){
     sr = nullptr;
     in = nullptr;
     pa = nullptr;
-    
 
     sf::Texture cpuTexture;
     sf::Texture gpuTexture;
@@ -63,7 +64,7 @@ int main(){
     std::vector<CPU> centralUnit;
     std::srand(std::time(nullptr));
    
-    obstacleAlgorithm(storage, x, ssdTexture, gpuTexture, graphics, cpuTexture, centralUnit);
+    obstacleAlgorithm(storage, x, ssdTexture, gpuTexture, graphics, cpuTexture, centralUnit, count);
     py.PlayerBuild(player);
 
     float yPoz = player.getPosition().y;
@@ -81,12 +82,11 @@ int main(){
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                window.close();
-            }
+            if (event.type == sf::Event::Closed) {window.close();}
         }
         float getX = player.getPosition().x;
         float getY = player.getPosition().y;
+        std::cout << getX << '\n';
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::E) && isStartMenu){sr->startMenuButton(startMusic, sr, ms, isStartMenu, isGameMenu);}
         else if(sf::Keyboard::isKeyPressed(sf::Keyboard::I) && isStartMenu){in->infoMenuButton(in, ms, isInfoMenu, isStartMenu);}
@@ -101,6 +101,15 @@ int main(){
 
             if(!isPauseMenu){count += 1;}
 
+            if(count > 2000){
+                prevSpeed = 6.f;
+                py.speed = prevSpeed;
+            }
+            else{
+                prevSpeed = 7.f;
+                py.speed = prevSpeed;
+            }
+
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
                 isPauseMenu = true;
                 pa = new Pause();
@@ -111,22 +120,23 @@ int main(){
                 isPauseMenu = false;
                 delete pa;
                 pa = nullptr;
-                py.speed = 5.f;
+                py.speed = prevSpeed;
+            }
+
+            //object cliding
+            if(devMode){
+                for(auto &stor : storage){
+                    stor.ssdColide(player, sr, isGameMenu, count, prev, best);
+                }
+                for(auto &stor1 : graphics){
+                    stor1.gpuColide(player, sr, isGameMenu, count, prev, best);
+                }
+                for(auto &stor2 : centralUnit){
+                    stor2.cpuColide(player, sr, isGameMenu, count, prev, best);
+                }
             }
             
-            for(auto &stor : storage){
-                stor.ssdColide(player, sr, isGameMenu, count, prev, best);
-            }
-            for(auto &stor1 : graphics){
-                stor1.gpuColide(player, sr, isGameMenu, count, prev, best);
-            }
-            for(auto &stor2 : centralUnit){
-                stor2.cpuColide(player, sr, isGameMenu, count, prev, best);
-            }
-            
-            if(gameMusic.getStatus() != sf::Music::Playing){
-                gameMusic.play();
-            }
+            if(gameMusic.getStatus() != sf::Music::Playing){gameMusic.play();}
         }
         
         //draw
@@ -163,14 +173,14 @@ int main(){
     return 0;
 }
 
-void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics, sf::Texture &cpuTexture, std::vector<CPU> &centralUnit){
+void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics, sf::Texture &cpuTexture, std::vector<CPU> &centralUnit, long long &count){
     int prev = 0;
     int random = x;
     int level1;
     int obstacle;
     int yRandom;
     //at poz.x 30.000
-    for(int i = 0; i <= 100; i++){
+    for(int i = 0; i <= 300; i++){
         obstacle = std::rand() % 3;
         yRandom = std::rand() % 3;
 
@@ -196,8 +206,8 @@ void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTextur
                 break;
             }
         }
-
-        if(x < 100000){
+        // de lucrat aici
+        if(x < 4000000){
             level1 = std::rand() % 5;
             prev = x;
             x = random;
