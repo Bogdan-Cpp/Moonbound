@@ -22,7 +22,7 @@ int main(){
     bool isGameMenu = false;
     bool isInfoMenu = false;
     bool isPauseMenu = false;
-    bool devMode = false;
+    bool devMode = true;
 
     long long count = 0;
     long long prev = 0;
@@ -86,7 +86,6 @@ int main(){
         }
         float getX = player.getPosition().x;
         float getY = player.getPosition().y;
-        std::cout << getX << '\n';
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::E) && isStartMenu){sr->startMenuButton(startMusic, sr, ms, isStartMenu, isGameMenu);}
         else if(sf::Keyboard::isKeyPressed(sf::Keyboard::I) && isStartMenu){in->infoMenuButton(in, ms, isInfoMenu, isStartMenu);}
@@ -181,7 +180,7 @@ void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTextur
     int yRandom;
     //at poz.x 30.000
     for(int i = 0; i <= 300; i++){
-        obstacle = std::rand() % 3;
+        obstacle = std::rand() % 4;
         yRandom = std::rand() % 3;
 
         //choose an obstacle
@@ -189,7 +188,10 @@ void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTextur
             storage.push_back(Ssd(random, 1960, ssdTexture));
         }
         else if(obstacle == 2){
-            graphics.push_back(GPU(random, 1910, gpuTexture));
+            graphics.push_back(GPU(random, 1910, 0, gpuTexture));
+        }
+        else if(obstacle == 3){
+            graphics.push_back(GPU(random, 1920, 90, gpuTexture));
         }
         else if(obstacle == 0){
             switch(yRandom){

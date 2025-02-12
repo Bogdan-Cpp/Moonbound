@@ -10,16 +10,19 @@ class GPU{
     sf::Sprite gpu;
     float xPoz;
     float yPoz;
+    float rotation;
     
-    GPU(float xPoz, float yPoz, sf::Texture &gpuTexture){
+    GPU(float xPoz, float yPoz, float rotation, sf::Texture &gpuTexture){
         this->xPoz = xPoz;
         this->yPoz = yPoz;
+        this->rotation = rotation;
 
         if(!gpuTexture.loadFromFile("../assets/gpu1.png")){
             throw std::runtime_error("ssd texture was not found!");
         }
         this->gpu.setTexture(gpuTexture);
         gpu.setScale(1.4f, 1.4f);
+        gpu.setRotation(rotation);
         gpu.setPosition(sf::Vector2f(xPoz, yPoz));
     }
 
