@@ -2,6 +2,8 @@
 #include <SFML/Audio.hpp>
 #include <iostream>
 #include <optional>
+#include <chrono>
+#include <thread>
 #include <vector>
 #include <cmath>
 #include <cstdlib>
@@ -22,7 +24,8 @@ int main(){
     bool isGameMenu = false;
     bool isInfoMenu = false;
     bool isPauseMenu = false;
-    bool devMode = false;
+    bool isBluescreen = false;
+    bool devMode = true;
 
     long long count = 0;
     long long prev = 0;
@@ -39,6 +42,7 @@ int main(){
     MenuS *ms = new MenuS();
     Pause *pa = new Pause();
     sf::Music gameMusic;
+    sf::Music bluescreenMusic;
     
     delete sr;
     delete in;
@@ -50,13 +54,15 @@ int main(){
     sf::Texture cpuTexture;
     sf::Texture gpuTexture;
     sf::Texture ssdTexture;
-    Player py;
-    sf::Image image;
+    sf::Texture bluescreenTexture;
     sf::Font fStart;
     sf::Font fPause;
-    sf::Text oc("Overclocking: an extreme sport\n for PCs!", fPause, 40);
     sf::RectangleShape player;
     sf::RectangleShape floor1;
+    sf::Sprite blueScreen;
+    Player py;
+    sf::Image image;
+    sf::Text oc("Overclocking: an extreme sport\n for PCs!", fPause, 40);
     sf::View camera(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920.f, 1080.f)));
     sf::Music *startMusic = new sf::Music();
     int x = 1000;
@@ -67,18 +73,22 @@ int main(){
    
     obstacleAlgorithm(storage, x, ssdTexture, gpuTexture, graphics, cpuTexture, centralUnit, count);
     py.PlayerBuild(player);
-
     float yPoz = player.getPosition().y;
-    oc.setPosition(12000.f, 1700.f);
+
     //file verification
     if(!fStart.loadFromFile("../assets/startFont.ttf")){return -1;}
     if(!fPause.loadFromFile("../assets/pauseFont.ttf")){return -1;}
     if(!startMusic->openFromFile("../assets/music.ogg")){return -1;}
-    if(!gameMusic.openFromFile("../assets/gameMusic.ogg")){return -1;}
+    if(!gameMusic.openFromFile("../assets/gameMusic2.ogg")){return -1;}
     if(!image.loadFromFile("../assets/gameIcon.png")){return -1;}
-    
+    if(!bluescreenTexture.loadFromFile("../assets/bluescreen1.png")){return -1;}
+    if(!bluescreenMusic.openFromFile("../assets/bluescreenM.ogg")){return -1;}
+
     window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
     startMusic->play();
+    oc.setPosition(12000.f, 1700.f);
+    blueScreen.setTexture(bluescreenTexture);
+    blueScreen.setScale(1.f, 1.f);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -98,45 +108,53 @@ int main(){
             sr->ObjectPosition(floor1);
             py.PlayerMove(player);
             py.playerCrouch(player);
-
+            blueScreen.setPosition(getX - 710.f, 1410);
             if(!isPauseMenu){count += 1;}
-
-            if(count > 2000){
-                prevSpeed = 8.f;
-                py.speed = prevSpeed;
+            
+            if(isBluescreen){
+                gameMusic.stop();
+                if(bluescreenMusic.getStatus() != sf::Music::Playing){bluescreenMusic.play();}
+                py.speed = 0;
+                count += 0;
+                std::this_thread::sleep_for(std::chrono::seconds(2));
+                isBluescreen = false;
             }
             else{
-                prevSpeed = 7.f;
-                py.speed = prevSpeed;
+                if(count > 2000){
+                    prevSpeed = 8.f;
+                    py.speed = prevSpeed;
+                }
+                else{
+                    prevSpeed = 7.f;
+                    py.speed = prevSpeed;
+                }
+    
+                if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
+                    isPauseMenu = true;
+                    pa = new Pause();
+                    py.speed = 0.f;
+                }
+    
+                if(sf::Keyboard::isKeyPressed(sf::Keyboard::Z) && isPauseMenu){
+                    isPauseMenu = false;
+                    delete pa;
+                    pa = nullptr;
+                    py.speed = prevSpeed;
+                }
+                if(gameMusic.getStatus() != sf::Music::Playing){gameMusic.play();}
             }
-
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
-                isPauseMenu = true;
-                pa = new Pause();
-                py.speed = 0.f;
-            }
-
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Z) && isPauseMenu){
-                isPauseMenu = false;
-                delete pa;
-                pa = nullptr;
-                py.speed = prevSpeed;
-            }
-
             //object cliding
             if(devMode){
                 for(auto &stor : storage){
-                    stor.ssdColide(player, sr, isGameMenu, count, prev, best);
+                    stor.ssdColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
                 }
                 for(auto &stor1 : graphics){
-                    stor1.gpuColide(player, sr, isGameMenu, count, prev, best);
+                    stor1.gpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
                 }
                 for(auto &stor2 : centralUnit){
-                    stor2.cpuColide(player, sr, isGameMenu, count, prev, best);
+                    stor2.cpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
                 }
             }
-            
-            if(gameMusic.getStatus() != sf::Music::Playing){gameMusic.play();}
         }
         
         //draw
@@ -161,6 +179,9 @@ int main(){
             }
             if(isPauseMenu){
                 pa->drawPause(fPause, window, getX);
+            }
+            if(isBluescreen){
+                window.draw(blueScreen);
             }
         }
 

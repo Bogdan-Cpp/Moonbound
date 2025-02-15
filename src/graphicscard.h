@@ -30,7 +30,7 @@ class GPU{
         window.draw(gpu);
     }
 
-    void gpuColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best){
+    void gpuColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best, bool &isBluescreen){
         if(player.getGlobalBounds().intersects(gpu.getGlobalBounds())){
             isGameMenu = false;
             delete sr;
@@ -40,7 +40,8 @@ class GPU{
             if(count > best){
                 best = count;
             }
-            
+            isBluescreen = true;
+
             player.setPosition(sf::Vector2f(100.f, 1950.f));
             sr = new Start();
             isGameMenu = true;

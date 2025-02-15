@@ -27,7 +27,7 @@ class CPU{
         window.draw(cpu);
     }
 
-    void cpuColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best){
+    void cpuColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best, bool &isBluescreen){
         if(player.getGlobalBounds().intersects(cpu.getGlobalBounds())){
             isGameMenu = false;
             delete sr;
@@ -37,7 +37,8 @@ class CPU{
             if(count > best){
                 best = count;
             }
-            
+            isBluescreen = true;
+
             player.setPosition(sf::Vector2f(100.f, 1950.f));
             sr = new Start();
             isGameMenu = true;

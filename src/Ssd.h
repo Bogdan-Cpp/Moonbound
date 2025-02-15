@@ -27,7 +27,7 @@ class Ssd{
         window.draw(ssd);
     }
 
-    void ssdColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best){
+    void ssdColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best, bool &isBluescreen){
         if(player.getGlobalBounds().intersects(ssd.getGlobalBounds())){
             isGameMenu = false;
             delete sr;
@@ -37,6 +37,7 @@ class Ssd{
             if(count > best){
                 best = count;
             }
+            isBluescreen = true;
             
             player.setPosition(sf::Vector2f(100.f, 1950.f));
             sr = new Start();
