@@ -22,7 +22,7 @@ int main(){
     bool isGameMenu = false;
     bool isInfoMenu = false;
     bool isPauseMenu = false;
-    bool devMode = true;
+    bool devMode = false;
 
     long long count = 0;
     long long prev = 0;
@@ -49,15 +49,18 @@ int main(){
 
     sf::Texture cpuTexture;
     sf::Texture gpuTexture;
+    sf::Texture ssdTexture;
+    sf::Texture xpTexture;
+    sf::Sprite winXp;
     Player py;
     sf::Image image;
     sf::Font fStart;
     sf::Font fPause;
+    sf::Text oc("Overclocking: an extreme sport\n for PCs!", fPause, 40);
     sf::RectangleShape player;
     sf::RectangleShape floor1;
     sf::View camera(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920.f, 1080.f)));
     sf::Music *startMusic = new sf::Music();
-    sf::Texture ssdTexture;
     int x = 1000;
     std::vector<Ssd> storage;
     std::vector<GPU> graphics;
@@ -68,16 +71,20 @@ int main(){
     py.PlayerBuild(player);
 
     float yPoz = player.getPosition().y;
-    
+    oc.setPosition(12000.f, 1700.f);
     //file verification
     if(!fStart.loadFromFile("../assets/startFont.ttf")){return -1;}
     if(!fPause.loadFromFile("../assets/pauseFont.ttf")){return -1;}
     if(!startMusic->openFromFile("../assets/music.ogg")){return -1;}
     if(!gameMusic.openFromFile("../assets/gameMusic.ogg")){return -1;}
     if(!image.loadFromFile("../assets/gameIcon.png")){return -1;}
+    if(!xpTexture.loadFromFile("../assets/xp1.png")){return -1;}
     
     window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
     startMusic->play();
+    winXp.setTexture(xpTexture);
+    winXp.setScale(8.f, 8.f);
+    winXp.setPosition(3000.f, 1375.f);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -101,7 +108,7 @@ int main(){
             if(!isPauseMenu){count += 1;}
 
             if(count > 2000){
-                prevSpeed = 6.f;
+                prevSpeed = 8.f;
                 py.speed = prevSpeed;
             }
             else{
@@ -148,6 +155,8 @@ int main(){
         else if(isGameMenu && sr != nullptr){
             sr->Scor(fStart, window, getX, count, prev, best);
             sr->ObjectDraw(window, floor1, player);
+            window.draw(oc);
+            window.draw(winXp);
             for(auto &storages : storage){
                 storages.drawSsd(window);
             }
