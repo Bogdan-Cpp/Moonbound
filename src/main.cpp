@@ -42,11 +42,13 @@ int main(){
     MenuS *ms = new MenuS();
     Pause *pa = new Pause();
     sf::Music gameMusic;
-    sf::Music bluescreenMusic;
+    sf::Music *bluescreenMusic = new sf::Music();
     
     delete sr;
     delete in;
     delete pa;
+    delete bluescreenMusic;
+    bluescreenMusic = nullptr;
     sr = nullptr;
     in = nullptr;
     pa = nullptr;
@@ -82,7 +84,6 @@ int main(){
     if(!gameMusic.openFromFile("../assets/gameMusic2.ogg")){return -1;}
     if(!image.loadFromFile("../assets/gameIcon.png")){return -1;}
     if(!bluescreenTexture.loadFromFile("../assets/bluescreen1.png")){return -1;}
-    if(!bluescreenMusic.openFromFile("../assets/bluescreenM.ogg")){return -1;}
 
     window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
     startMusic->play();
@@ -113,11 +114,17 @@ int main(){
             
             if(isBluescreen){
                 gameMusic.stop();
-                if(bluescreenMusic.getStatus() != sf::Music::Playing){bluescreenMusic.play();}
+                bluescreenMusic = new sf::Music();
+                if(!bluescreenMusic->openFromFile("../assets/bluescreenM.ogg")){return -1;}
+                if(bluescreenMusic->getStatus() != sf::Music::Playing){bluescreenMusic->play();}
+                
                 py.speed = 0;
                 count += 0;
                 std::this_thread::sleep_for(std::chrono::seconds(2));
+                
                 isBluescreen = false;
+                delete bluescreenMusic;
+                bluescreenMusic = nullptr;
             }
             else{
                 if(count > 2000){
