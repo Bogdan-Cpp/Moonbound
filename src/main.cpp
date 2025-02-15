@@ -50,8 +50,6 @@ int main(){
     sf::Texture cpuTexture;
     sf::Texture gpuTexture;
     sf::Texture ssdTexture;
-    sf::Texture xpTexture;
-    sf::Sprite winXp;
     Player py;
     sf::Image image;
     sf::Font fStart;
@@ -78,13 +76,9 @@ int main(){
     if(!startMusic->openFromFile("../assets/music.ogg")){return -1;}
     if(!gameMusic.openFromFile("../assets/gameMusic.ogg")){return -1;}
     if(!image.loadFromFile("../assets/gameIcon.png")){return -1;}
-    if(!xpTexture.loadFromFile("../assets/xp1.png")){return -1;}
     
     window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
     startMusic->play();
-    winXp.setTexture(xpTexture);
-    winXp.setScale(8.f, 8.f);
-    winXp.setPosition(3000.f, 1375.f);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -156,7 +150,6 @@ int main(){
             sr->Scor(fStart, window, getX, count, prev, best);
             sr->ObjectDraw(window, floor1, player);
             window.draw(oc);
-            window.draw(winXp);
             for(auto &storages : storage){
                 storages.drawSsd(window);
             }
@@ -188,7 +181,7 @@ void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTextur
     int obstacle;
     int yRandom;
     //at poz.x 30.000
-    for(int i = 0; i <= 300; i++){
+    for(int i = 0; i <= 100; i++){
         obstacle = std::rand() % 4;
         yRandom = std::rand() % 3;
 
@@ -205,53 +198,49 @@ void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTextur
         else if(obstacle == 0){
             switch(yRandom){
                 case 0:
-                centralUnit.push_back(CPU(random, 1945, cpuTexture));
+                 centralUnit.push_back(CPU(random, 1945, cpuTexture));
                 break;
 
                 case 1:
-                centralUnit.push_back(CPU(random, 1920, cpuTexture));
+                 centralUnit.push_back(CPU(random, 1920, cpuTexture));
                 break;
 
                 case 2:
-                centralUnit.push_back(CPU(random, 1890, cpuTexture));
+                 centralUnit.push_back(CPU(random, 1890, cpuTexture));
                 break;
             }
         }
-        // de lucrat aici
-        if(x < 4000000){
-            level1 = std::rand() % 5;
-            prev = x;
-            x = random;
+        level1 = std::rand() % 5;
+        prev = x;
+        x = random;
 
-            switch(level1){
-               case 0:
-                prev += 400;
-                x += 350;
-                break;
+        switch(level1){
+            case 0:
+             prev += 400;
+             x += 350;
+            break;
                
-               case 1:
-                prev += 400;
-                x += 310;
-                break;
+            case 1:
+             prev += 400;
+             x += 310;
+            break;
 
-               case 2:
-                prev += 400;
-                x += 370;
-                break;
+            case 2:
+             prev += 400;
+             x += 370;
+            break;
                
-               case 3:
-                prev += 400;
-                x += 300;
-                break;
+            case 3:
+             prev += 400;
+             x += 300;
+            break;
 
-               case 4:
-                prev += 400;
-                x += 400;
-                break;
-            }
-
-            if(x > prev){random = prev + (std::rand() % (x - prev + 1));}
-            else{random = prev;}
+            case 4:
+             prev += 400;
+             x += 400;
+            break;
         }
+        if(x > prev){random = prev + (std::rand() % (x - prev + 1));}
+        else{random = prev;}
     }
 }
