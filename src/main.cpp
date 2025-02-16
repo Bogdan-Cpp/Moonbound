@@ -226,7 +226,7 @@ void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTextur
         else if(obstacle == 0){
             switch(yRandom){
                 case 0:
-                 centralUnit.push_back(CPU(random, 1945, cpuTexture));
+                 centralUnit.push_back(CPU(random, 1946, cpuTexture));
                 break;
 
                 case 1:
