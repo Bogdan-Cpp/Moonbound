@@ -16,8 +16,9 @@
 #include "pausem.h"
 #include "graphicscard.h"
 #include "procesor.h"
+#include "motherboard.h"
 
-void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics, sf::Texture &cpuTexture, std::vector<CPU> &centralUnit, long long &count);
+void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics, sf::Texture &cpuTexture, std::vector<CPU> &centralUnit, long long &count, std::vector<MB> &motherboard, sf::Texture &mbTexture);
 
 int main(){
     bool isStartMenu = true;
@@ -25,7 +26,7 @@ int main(){
     bool isInfoMenu = false;
     bool isPauseMenu = false;
     bool isBluescreen = false;
-    bool devMode = true;
+    bool devMode = false;
 
     long long count = 0;
     long long prev = 0;
@@ -57,6 +58,7 @@ int main(){
     sf::Texture gpuTexture;
     sf::Texture ssdTexture;
     sf::Texture bluescreenTexture;
+    sf::Texture mbTexture;
     sf::Font fStart;
     sf::Font fPause;
     sf::RectangleShape player;
@@ -67,13 +69,14 @@ int main(){
     sf::Text oc("Overclocking: an extreme sport\n for PCs!", fPause, 40);
     sf::View camera(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920.f, 1080.f)));
     sf::Music *startMusic = new sf::Music();
-    int x = 1000;
+    int x = 3000;
     std::vector<Ssd> storage;
     std::vector<GPU> graphics;
     std::vector<CPU> centralUnit;
+    std::vector<MB> motherboard;
     std::srand(std::time(nullptr));
    
-    obstacleAlgorithm(storage, x, ssdTexture, gpuTexture, graphics, cpuTexture, centralUnit, count);
+    obstacleAlgorithm(storage, x, ssdTexture, gpuTexture, graphics, cpuTexture, centralUnit, count, motherboard, mbTexture);
     py.PlayerBuild(player);
     float yPoz = player.getPosition().y;
 
@@ -161,6 +164,9 @@ int main(){
                 for(auto &stor2 : centralUnit){
                     stor2.cpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
                 }
+                for(auto &stor3 : motherboard){
+                    stor3.mbColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
+                }
             }
         }
         
@@ -175,6 +181,7 @@ int main(){
             sr->Scor(fStart, window, getX, count, prev, best);
             sr->ObjectDraw(window, floor1, player);
             window.draw(oc);
+
             for(auto &storages : storage){
                 storages.drawSsd(window);
             }
@@ -184,6 +191,10 @@ int main(){
             for(auto &procesores : centralUnit){
                 procesores.drawCpu(window);
             }
+            for(auto &motherboards : motherboard){
+                motherboards.drawMb(window);
+            }
+
             if(isPauseMenu){
                 pa->drawPause(fPause, window, getX);
             }
@@ -202,7 +213,7 @@ int main(){
     return 0;
 }
 
-void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics, sf::Texture &cpuTexture, std::vector<CPU> &centralUnit, long long &count){
+void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics, sf::Texture &cpuTexture, std::vector<CPU> &centralUnit, long long &count, std::vector<MB> &motherboard, sf::Texture &mbTexture){
     int prev = 0;
     int random = x;
     int level1;
@@ -210,7 +221,7 @@ void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTextur
     int yRandom;
     //at poz.x 30.000
     for(int i = 0; i <= 100; i++){
-        obstacle = std::rand() % 4;
+        obstacle = std::rand() % 5;
         yRandom = std::rand() % 3;
 
         //choose an obstacle
@@ -237,6 +248,9 @@ void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTextur
                  centralUnit.push_back(CPU(random, 1890, cpuTexture));
                 break;
             }
+        }
+        else if(obstacle == 4){
+            motherboard.push_back(MB(random, 1920, mbTexture));
         }
         level1 = std::rand() % 5;
         prev = x;
