@@ -14,6 +14,7 @@ class Player{
   float temp = 25.f;
   float jumpSpeed = 0.f;
   float groundLevel = 1950.f;
+  float jumpingAnimation = 0;
   
    void PlayerBuild(sf::RectangleShape &player){
       player.setFillColor(sf::Color(120, 120, 120));
@@ -39,14 +40,17 @@ class Player{
          isJumping = true;
          jumpSpeed = temp;
       }
+
       if(isJumping) {
         player.move(0.f, -jumpSpeed); 
         jumpSpeed += gravity;
-
+        
          if(player.getPosition().y >= groundLevel) {
             player.setPosition(player.getPosition().x, groundLevel);
             isJumping = false; 
             jumpSpeed = 0.f;
+
+            player.setRotation(std::round(player.getRotation() / 90) * 90);
          }
       }
    }

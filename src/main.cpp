@@ -18,7 +18,7 @@
 #include "procesor.h"
 #include "motherboard.h"
 
-void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics, sf::Texture &cpuTexture, std::vector<CPU> &centralUnit, long long &count, std::vector<MB> &motherboard, sf::Texture &mbTexture);
+void level1(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics, sf::Texture &cpuTexture, std::vector<CPU> &centralUnit, long long &count, std::vector<MB> &motherboard, sf::Texture &mbTexture);
 
 int main(){
     bool isStartMenu = true;
@@ -26,7 +26,7 @@ int main(){
     bool isInfoMenu = false;
     bool isPauseMenu = false;
     bool isBluescreen = false;
-    bool devMode = false;
+    bool devMode = true;
 
     long long count = 0;
     long long prev = 0;
@@ -67,6 +67,7 @@ int main(){
     Player py;
     sf::Image image;
     sf::Text oc("Overclocking: an extreme sport\n for PCs!", fPause, 40);
+    sf::Text start("Update your BIOS!", fPause, 30);
     sf::View camera(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920.f, 1080.f)));
     sf::Music *startMusic = new sf::Music();
     int x = 3000;
@@ -76,7 +77,7 @@ int main(){
     std::vector<MB> motherboard;
     std::srand(std::time(nullptr));
    
-    obstacleAlgorithm(storage, x, ssdTexture, gpuTexture, graphics, cpuTexture, centralUnit, count, motherboard, mbTexture);
+    level1(storage, x, ssdTexture, gpuTexture, graphics, cpuTexture, centralUnit, count, motherboard, mbTexture);
     py.PlayerBuild(player);
     float yPoz = player.getPosition().y;
 
@@ -91,6 +92,7 @@ int main(){
     window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
     startMusic->play();
     oc.setPosition(12000.f, 1700.f);
+    start.setPosition(1500.f, 1920.f);
     blueScreen.setTexture(bluescreenTexture);
     blueScreen.setScale(1.f, 1.f);
 
@@ -181,7 +183,7 @@ int main(){
             sr->Scor(fStart, window, getX, count, prev, best);
             sr->ObjectDraw(window, floor1, player);
             window.draw(oc);
-
+            window.draw(start);
             for(auto &storages : storage){
                 storages.drawSsd(window);
             }
@@ -213,44 +215,33 @@ int main(){
     return 0;
 }
 
-void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics, sf::Texture &cpuTexture, std::vector<CPU> &centralUnit, long long &count, std::vector<MB> &motherboard, sf::Texture &mbTexture){
+void level1(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics, sf::Texture &cpuTexture, std::vector<CPU> &centralUnit, long long &count, std::vector<MB> &motherboard, sf::Texture &mbTexture){
     int prev = 0;
     int random = x;
     int level1;
     int obstacle;
     int yRandom;
     //at poz.x 30.000
-    for(int i = 0; i <= 100; i++){
-        obstacle = std::rand() % 5;
-        yRandom = std::rand() % 3;
+    for(int i = 0; i <= 20; i++){
+        obstacle = std::rand() % 4;
+        
+        switch(obstacle){
+            case 0:
+             motherboard.push_back(MB(random, 1920, mbTexture));
+            break;
 
-        //choose an obstacle
-        if(obstacle == 1){
-            storage.push_back(Ssd(random, 1960, ssdTexture));
-        }
-        else if(obstacle == 2){
-            graphics.push_back(GPU(random, 1910, 0, gpuTexture));
-        }
-        else if(obstacle == 3){
-            graphics.push_back(GPU(random, 1920, 90, gpuTexture));
-        }
-        else if(obstacle == 0){
-            switch(yRandom){
-                case 0:
-                 centralUnit.push_back(CPU(random, 1946, cpuTexture));
-                break;
+            case 1:
+             motherboard.push_back(MB(random, 1920, mbTexture));
+            break;
 
-                case 1:
-                 centralUnit.push_back(CPU(random, 1920, cpuTexture));
-                break;
-
-                case 2:
-                 centralUnit.push_back(CPU(random, 1890, cpuTexture));
-                break;
-            }
-        }
-        else if(obstacle == 4){
-            motherboard.push_back(MB(random, 1920, mbTexture));
+            case 2:
+             motherboard.push_back(MB(random, 1920, mbTexture));
+            break;
+            
+            case 3:
+             graphics.push_back(GPU(random, 1920, 0, gpuTexture));
+             centralUnit.push_back(CPU(random + 50, 1945, cpuTexture));
+            break;
         }
         level1 = std::rand() % 5;
         prev = x;
@@ -258,27 +249,27 @@ void obstacleAlgorithm(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTextur
 
         switch(level1){
             case 0:
-             prev += 400;
+             prev += 600;
              x += 350;
             break;
                
             case 1:
-             prev += 400;
+             prev += 560;
              x += 310;
             break;
 
             case 2:
-             prev += 400;
+             prev += 490;
              x += 370;
             break;
                
             case 3:
-             prev += 400;
+             prev += 670;
              x += 300;
             break;
 
             case 4:
-             prev += 400;
+             prev += 580;
              x += 400;
             break;
         }

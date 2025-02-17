@@ -10,6 +10,7 @@ class Ssd{
     sf::Sprite ssd;
     float xPoz;
     float yPoz;
+    float rotation;
     
     Ssd(float xPoz, float yPoz, sf::Texture &ssdTexture){
         this->xPoz = xPoz;

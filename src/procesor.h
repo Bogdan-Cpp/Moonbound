@@ -15,11 +15,11 @@ class CPU{
         this->xPoz = xPoz;
         this->yPoz = yPoz;
 
-        if(!cpuTexture.loadFromFile("../assets/cpu1.png")){
+        if(!cpuTexture.loadFromFile("../assets/gameIcon.png")){
             throw std::runtime_error("ssd texture was not found!");
         }
         this->cpu.setTexture(cpuTexture);
-        cpu.setScale(1.6f, 1.7f);
+        cpu.setScale(1.5f, 1.5f);
         cpu.setPosition(sf::Vector2f(xPoz, yPoz));
     }
 
