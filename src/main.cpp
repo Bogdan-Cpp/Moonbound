@@ -21,12 +21,20 @@
 void level1(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics, sf::Texture &cpuTexture, std::vector<CPU> &centralUnit, long long &count, std::vector<MB> &motherboard, sf::Texture &mbTexture);
 
 int main(){
+    std::string bios1 = "No";
+    std::string windows1 = "No";
+    std::string build1 = "No";
+
     bool isStartMenu = true;
     bool isGameMenu = false;
     bool isInfoMenu = false;
     bool isPauseMenu = false;
     bool isBluescreen = false;
-    bool devMode = true;
+    bool devMode = false;
+
+    bool biosUpdate = false;
+    bool windowsUpdate = false;
+    bool buildPc = false;
 
     long long count = 0;
     long long prev = 0;
@@ -67,7 +75,10 @@ int main(){
     Player py;
     sf::Image image;
     sf::Text oc("Overclocking: an extreme sport\n for PCs!", fPause, 40);
-    sf::Text start("Update your BIOS!", fPause, 30);
+    sf::Text start("Update your BIOS! \n colect the TOOL", fPause, 30);
+    sf::Text bios("Bios Updated: " + bios1, fPause, 20);
+    sf::Text windows("Windows Updated: " + windows1, fPause, 20);
+    sf::Text build("Build finished: " + build1, fPause, 20);
     sf::View camera(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920.f, 1080.f)));
     sf::Music *startMusic = new sf::Music();
     int x = 3000;
@@ -91,10 +102,13 @@ int main(){
 
     window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
     startMusic->play();
-    oc.setPosition(12000.f, 1700.f);
+    oc.setPosition(16000.f, 1700.f);
     start.setPosition(1500.f, 1920.f);
     blueScreen.setTexture(bluescreenTexture);
     blueScreen.setScale(1.f, 1.f);
+    bios.setFillColor(sf::Color(120.f, 120.f, 120.f));
+    windows.setFillColor(sf::Color(120.f, 120.f, 120.f));
+    build.setFillColor(sf::Color(120.f, 120.f, 120.f));
 
     while (window.isOpen()) {
         sf::Event event;
@@ -116,6 +130,9 @@ int main(){
             py.playerCrouch(player);
             blueScreen.setPosition(getX - 710.f, 1410);
             if(!isPauseMenu){count += 1;}
+            bios.setPosition(getX - 700.f, 2360.f);
+            windows.setPosition(getX - 700.f, 2390.f);
+            build.setPosition(getX - 700.f, 2420.f);
             
             if(isBluescreen){
                 gameMusic.stop();
@@ -158,16 +175,16 @@ int main(){
             //object cliding
             if(devMode){
                 for(auto &stor : storage){
-                    stor.ssdColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
+                    stor.ssdColide(player, sr, isGameMenu, count, prev, best, isBluescreen, biosUpdate, windowsUpdate, buildPc);
                 }
                 for(auto &stor1 : graphics){
-                    stor1.gpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
+                    stor1.gpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen, biosUpdate, windowsUpdate, buildPc);
                 }
                 for(auto &stor2 : centralUnit){
-                    stor2.cpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
+                    stor2.cpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen, biosUpdate, windowsUpdate, buildPc);
                 }
                 for(auto &stor3 : motherboard){
-                    stor3.mbColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
+                    stor3.mbColide(player, sr, isGameMenu, count, prev, best, isBluescreen, biosUpdate, windowsUpdate, buildPc);
                 }
             }
         }
@@ -184,6 +201,7 @@ int main(){
             sr->ObjectDraw(window, floor1, player);
             window.draw(oc);
             window.draw(start);
+
             for(auto &storages : storage){
                 storages.drawSsd(window);
             }
@@ -203,6 +221,9 @@ int main(){
             if(isBluescreen){
                 window.draw(blueScreen);
             }
+            window.draw(bios);
+            window.draw(windows);
+            window.draw(build);
         }
 
         else if(isInfoMenu && in != nullptr){
@@ -250,22 +271,22 @@ void level1(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Text
         switch(level1){
             case 0:
              prev += 600;
-             x += 350;
+             x += 400;
             break;
                
             case 1:
              prev += 560;
-             x += 310;
+             x += 480;
             break;
 
             case 2:
              prev += 490;
-             x += 370;
+             x += 560;
             break;
                
             case 3:
              prev += 670;
-             x += 300;
+             x += 460;
             break;
 
             case 4:

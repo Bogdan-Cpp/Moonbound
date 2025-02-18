@@ -27,7 +27,7 @@ class MB{
         window.draw(motherBoard);
     }
 
-    void mbColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best, bool &isBluescreen){
+    void mbColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best, bool &isBluescreen, bool &biosUpdate, bool &windowsUpdate, bool &buildPc){
         if(player.getGlobalBounds().intersects(motherBoard.getGlobalBounds())){
             isGameMenu = false;
             delete sr;
@@ -43,6 +43,9 @@ class MB{
             sr = new Start();
             isGameMenu = true;
             count = 0;
+            biosUpdate = false;
+            windowsUpdate = false;
+            buildPc = false;
         }
     }
 };
