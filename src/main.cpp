@@ -17,20 +17,17 @@
 #include "graphicscard.h"
 #include "procesor.h"
 #include "motherboard.h"
-
-void level1(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics, sf::Texture &cpuTexture, std::vector<CPU> &centralUnit, long long &count, std::vector<MB> &motherboard, sf::Texture &mbTexture);
+#include "levels.h"
 
 int main(){
-    std::string bios1 = "No";
-    std::string windows1 = "No";
-    std::string build1 = "No";
-
     bool isStartMenu = true;
     bool isGameMenu = false;
     bool isInfoMenu = false;
     bool isPauseMenu = false;
     bool isBluescreen = false;
-    bool devMode = false;
+    bool devMode = true;
+
+    int setLevel = 0;
 
     long long count = 0;
     long long prev = 0;
@@ -42,6 +39,7 @@ int main(){
     window.setVerticalSyncEnabled(true);
 
     //class apelation
+    Level lv;
     Start *sr = new Start();
     Info *in = new Info();
     MenuS *ms = new MenuS();
@@ -73,13 +71,18 @@ int main(){
     sf::View camera(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920.f, 1080.f)));
     sf::Music *startMusic = new sf::Music();
     int x = 3000;
-    std::vector<Ssd> storage;
     std::vector<GPU> graphics;
     std::vector<CPU> centralUnit;
     std::vector<MB> motherboard;
+    
+    std::vector<Ssd> storage2;
+    std::vector<GPU> graphics2;
+    std::vector<CPU> centralUnit2;
+    std::vector<MB> motherboard2;
     std::srand(std::time(nullptr));
    
-    level1(storage, x, ssdTexture, gpuTexture, graphics, cpuTexture, centralUnit, count, motherboard, mbTexture);
+    lv.level1(x, gpuTexture, graphics, cpuTexture, centralUnit, count, motherboard, mbTexture);
+    lv.level2(storage2, x, ssdTexture, gpuTexture, graphics2, cpuTexture, centralUnit2, count, motherboard2, mbTexture);
     py.PlayerBuild(player);
     float yPoz = player.getPosition().y;
 
@@ -103,7 +106,7 @@ int main(){
         }
         float getX = player.getPosition().x;
         float getY = player.getPosition().y;
-
+        
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::E) && isStartMenu){sr->startMenuButton(startMusic, sr, ms, isStartMenu, isGameMenu);}
         else if(sf::Keyboard::isKeyPressed(sf::Keyboard::I) && isStartMenu){in->infoMenuButton(in, ms, isInfoMenu, isStartMenu);}
         else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !isStartMenu && isInfoMenu){in->infoMenuQuit(in, ms, isInfoMenu, isStartMenu);}
@@ -116,8 +119,10 @@ int main(){
             py.playerCrouch(player);
             blueScreen.setPosition(getX - 710.f, 1410);
             if(!isPauseMenu){count += 1;}
+            std::cout << getX << '\n';
             
             if(isBluescreen){
+                //if is bluescreen
                 gameMusic.stop();
                 bluescreenMusic = new sf::Music();
                 if(!bluescreenMusic->openFromFile("../assets/bluescreenM.ogg")){return -1;}
@@ -132,9 +137,21 @@ int main(){
                 bluescreenMusic = nullptr;
             }
             else{
+                //normal
                 prevSpeed = 10.f;
                 py.speed = prevSpeed;
                 
+                if(getX < 15000){
+                    setLevel = 1;
+                }
+                else if(getX > 15000){
+                    setLevel = 2;
+                }      
+                if(getX > 15000 && !graphics.empty() && !centralUnit.empty() && !motherboard.empty()){
+                    graphics.clear();
+                    centralUnit.clear();
+                    motherboard.clear();
+                }
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
                     isPauseMenu = true;
                     pa = new Pause();
@@ -149,19 +166,37 @@ int main(){
                 }
                 if(gameMusic.getStatus() != sf::Music::Playing){gameMusic.play();}
             }
-            //object cliding
+            
+            //coliziune
             if(devMode){
-                for(auto &stor : storage){
-                    stor.ssdColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
-                }
-                for(auto &stor1 : graphics){
-                    stor1.gpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
-                }
-                for(auto &stor2 : centralUnit){
-                    stor2.cpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
-                }
-                for(auto &stor3 : motherboard){
-                    stor3.mbColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
+                switch(setLevel){
+                    case 1:
+                    for(auto &obstacle2 : graphics){
+                        obstacle2.gpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
+                    }
+                    for(auto &obstacle2 : centralUnit){
+                        obstacle2.cpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
+                    }
+                    for(auto &obstacle4 : motherboard){
+                        obstacle4.mbColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
+                    }
+                    break;
+
+                    case 2:
+                    for(auto &obstacle1 : storage2){
+                        obstacle1.ssdColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
+                    }
+                    for(auto &obstacle2 : graphics2){
+                        obstacle2.gpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
+                    }
+                    for(auto &obstacle2 : centralUnit2){
+                        obstacle2.cpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
+                    }
+                    for(auto &obstacle4 : motherboard2){
+                        obstacle4.mbColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
+                    }
+                    break;
+                    //level3
                 }
             }
         }
@@ -176,18 +211,33 @@ int main(){
         else if(isGameMenu && sr != nullptr){
             sr->Scor(fStart, window, getX, count, prev, best);
             sr->ObjectDraw(window, floor1, player);
+            switch(setLevel){
+                case 1:
+                for(auto &graphic : graphics){
+                    graphic.drawGpu(window);
+                }
+                for(auto &procesores : centralUnit){
+                    procesores.drawCpu(window);
+                }
+                for(auto &motherboards : motherboard){
+                    motherboards.drawMb(window);
+                }
+                break;
 
-            for(auto &storages : storage){
-                storages.drawSsd(window);
-            }
-            for(auto &graphic : graphics){
-                graphic.drawGpu(window);
-            }
-            for(auto &procesores : centralUnit){
-                procesores.drawCpu(window);
-            }
-            for(auto &motherboards : motherboard){
-                motherboards.drawMb(window);
+                case 2:
+                for(auto &storages : storage2){
+                    storages.drawSsd(window);
+                }
+                for(auto &graphic : graphics2){
+                    graphic.drawGpu(window);
+                }
+                for(auto &procesores : centralUnit2){
+                    procesores.drawCpu(window);
+                }
+                for(auto &motherboards : motherboard2){
+                    motherboards.drawMb(window);
+                }
+                break;
             }
 
             if(isPauseMenu){
@@ -201,72 +251,7 @@ int main(){
         else if(isInfoMenu && in != nullptr){
             in->infoMenuDraw(window, fStart);
         }
-
         window.display();
     }
-    
     return 0;
-}
-
-void level1(std::vector<Ssd> &storage, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics, sf::Texture &cpuTexture, std::vector<CPU> &centralUnit, long long &count, std::vector<MB> &motherboard, sf::Texture &mbTexture){
-    int prev = 0;
-    int random = x;
-    int level1;
-    int obstacle;
-    int yRandom;
-    //at poz.x 30.000
-    for(int i = 0; i <= 20; i++){
-        obstacle = std::rand() % 4;
-        
-        switch(obstacle){
-            case 0:
-             motherboard.push_back(MB(random, 1920, mbTexture));
-            break;
-
-            case 1:
-             motherboard.push_back(MB(random, 1920, mbTexture));
-            break;
-
-            case 2:
-             motherboard.push_back(MB(random, 1920, mbTexture));
-            break;
-            
-            case 3:
-             graphics.push_back(GPU(random, 1920, 0, gpuTexture));
-             centralUnit.push_back(CPU(random + 50, 1945, cpuTexture));
-            break;
-        }
-        level1 = std::rand() % 5;
-        prev = x;
-        x = random;
-
-        switch(level1){
-            case 0:
-             prev += 600;
-             x += 400;
-            break;
-               
-            case 1:
-             prev += 560;
-             x += 480;
-            break;
-
-            case 2:
-             prev += 490;
-             x += 560;
-            break;
-               
-            case 3:
-             prev += 670;
-             x += 460;
-            break;
-
-            case 4:
-             prev += 580;
-             x += 400;
-            break;
-        }
-        if(x > prev){random = prev + (std::rand() % (x - prev + 1));}
-        else{random = prev;}
-    }
 }
