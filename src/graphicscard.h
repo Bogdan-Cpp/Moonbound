@@ -30,7 +30,7 @@ class GPU{
         window.draw(gpu);
     }
 
-    void gpuColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best, bool &isBluescreen, bool &biosUpdate, bool &windowsUpdate, bool &buildPc){
+    void gpuColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best, bool &isBluescreen){
         if(player.getGlobalBounds().intersects(gpu.getGlobalBounds())){
             isGameMenu = false;
             delete sr;
@@ -46,9 +46,6 @@ class GPU{
             sr = new Start();
             isGameMenu = true;
             count = 0;
-            biosUpdate = false;
-            windowsUpdate = false;
-            buildPc = false;
         }
     }
 };

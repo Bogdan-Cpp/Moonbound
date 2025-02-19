@@ -27,7 +27,7 @@ class CPU{
         window.draw(cpu);
     }
 
-    void cpuColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best, bool &isBluescreen, bool &biosUpdate, bool &windowsUpdate, bool &buildPc){
+    void cpuColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best, bool &isBluescreen){
         if(player.getGlobalBounds().intersects(cpu.getGlobalBounds())){
             isGameMenu = false;
             delete sr;
@@ -43,9 +43,6 @@ class CPU{
             sr = new Start();
             isGameMenu = true;
             count = 0;
-            biosUpdate = false;
-            windowsUpdate = false;
-            buildPc = false;
         }
     }
 };

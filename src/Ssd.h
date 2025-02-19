@@ -28,7 +28,7 @@ class Ssd{
         window.draw(ssd);
     }
 
-    void ssdColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best, bool &isBluescreen, bool &biosUpdate, bool &windowsUpdate, bool &buildPc){
+    void ssdColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best, bool &isBluescreen){
         if(player.getGlobalBounds().intersects(ssd.getGlobalBounds())){
             isGameMenu = false;
             delete sr;
@@ -44,9 +44,6 @@ class Ssd{
             sr = new Start();
             isGameMenu = true;
             count = 0;
-            biosUpdate = false;
-            windowsUpdate = false;
-            buildPc = false;
         }
     }
 };
