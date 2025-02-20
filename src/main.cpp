@@ -28,6 +28,7 @@ int main(){
     bool devMode = true;
 
     int setLevel = 0;
+    bool shouldGenerate = true;
 
     long long count = 0;
     long long prev = 0;
@@ -80,7 +81,7 @@ int main(){
     std::vector<CPU> centralUnit2;
     std::vector<MB> motherboard2;
     std::srand(std::time(nullptr));
-   
+    
     lv.level1(x, gpuTexture, graphics, cpuTexture, centralUnit, count, motherboard, mbTexture);
     lv.level2(storage2, x, ssdTexture, gpuTexture, graphics2, cpuTexture, centralUnit2, count, motherboard2, mbTexture);
     py.PlayerBuild(player);
@@ -146,12 +147,8 @@ int main(){
                 }
                 else if(getX > 15000){
                     setLevel = 2;
-                }      
-                if(getX > 15000 && !graphics.empty() && !centralUnit.empty() && !motherboard.empty()){
-                    graphics.clear();
-                    centralUnit.clear();
-                    motherboard.clear();
                 }
+
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
                     isPauseMenu = true;
                     pa = new Pause();

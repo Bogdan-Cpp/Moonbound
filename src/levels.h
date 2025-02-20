@@ -72,7 +72,7 @@ class Level{
 
     void level2(std::vector<Ssd> &storage2, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics2, sf::Texture &cpuTexture, std::vector<CPU> &centralUnit2, long long &count, std::vector<MB> &motherboard2, sf::Texture &mbTexture){
         int prev = 0;
-        x = 16000;
+        x = 17000;
         int random = x;
         int level1;
         int obstacle;
@@ -105,7 +105,7 @@ class Level{
 
             switch(level1){
                 case 0:
-                prev += 100;
+                prev += 200;
                 x += 340;
                 break;
                
@@ -120,7 +120,7 @@ class Level{
                 break;
                
                 case 3:
-                prev += 170;
+                prev += 200;
                 x += 460;
                 break;
 
@@ -156,6 +156,10 @@ class Level{
             }
             if(x > prev){random = prev + (std::rand() % (x - prev + 1));}
             else{random = prev;}
+
+            if(random - x < 70){
+                random += 100;
+            }
         }
     }
 };
