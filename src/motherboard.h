@@ -39,7 +39,7 @@ class MB{
             }
             isBluescreen = true;
 
-            player.setPosition(sf::Vector2f(14000.f, 1950.f));
+            player.setPosition(sf::Vector2f(100.f, 1950.f));
             sr = new Start();
             isGameMenu = true;
             count = 0;

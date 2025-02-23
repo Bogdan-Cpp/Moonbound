@@ -56,7 +56,7 @@ int main(){
     sr = nullptr;
     in = nullptr;
     pa = nullptr;
-
+    
     sf::Texture cpuTexture;
     sf::Texture gpuTexture;
     sf::Texture ssdTexture;
@@ -69,6 +69,7 @@ int main(){
     sf::Sprite blueScreen;
     Player py;
     sf::Image image;
+    sf::Text msg1("Be careful because your \n GPU might be in fire!", fPause, 40);
     sf::View camera(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920.f, 1080.f)));
     sf::Music *startMusic = new sf::Music();
     int x = 3000;
@@ -99,6 +100,8 @@ int main(){
     startMusic->play();
     blueScreen.setTexture(bluescreenTexture);
     blueScreen.setScale(1.f, 1.f);
+    msg1.setFillColor(sf::Color::White);
+    msg1.setPosition(15500.f, 1890.f);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -120,7 +123,6 @@ int main(){
             py.playerCrouch(player);
             blueScreen.setPosition(getX - 710.f, 1410);
             if(!isPauseMenu){count += 1;}
-            std::cout << getX << '\n';
             
             if(isBluescreen){
                 //if is bluescreen
@@ -208,6 +210,8 @@ int main(){
         else if(isGameMenu && sr != nullptr){
             sr->Scor(fStart, window, getX, count, prev, best);
             sr->ObjectDraw(window, floor1, player);
+            window.draw(msg1);
+
             switch(setLevel){
                 case 1:
                 for(auto &graphic : graphics){

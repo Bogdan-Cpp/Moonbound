@@ -71,94 +71,48 @@ class Level{
     }
 
     void level2(std::vector<Ssd> &storage2, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics2, sf::Texture &cpuTexture, std::vector<CPU> &centralUnit2, long long &count, std::vector<MB> &motherboard2, sf::Texture &mbTexture){
-        int prev = 0;
-        x = 17000;
-        int random = x;
-        int level1;
+        x = 17500;
         int obstacle;
-        int yRandom;
-        int positionType;
-    
-        for(int i = 0; i <= 100; i++){
-            obstacle = std::rand() % 4;
-        
+        int position;
+        int random = x;
+        int remember = 0;
+
+        for(int i = 0; i <= 50; i++){
+            obstacle = std::rand() % 3;
+
             switch(obstacle){
                 case 0:
-                motherboard2.push_back(MB(random, 1920, mbTexture));
+                storage2.push_back(Ssd(random, 1940, ssdTexture));
                 break;
 
                 case 1:
-                motherboard2.push_back(MB(random, 1920, mbTexture));
-                break;
-
-                case 2:
                 graphics2.push_back(GPU(random, 1920, 0, gpuTexture));
                 break;
-            
-                case 3:
-                centralUnit2.push_back(CPU(random + 50, 1945, cpuTexture));
+
+                case 2:
+                graphics2.push_back(GPU(random, 1910, 90, gpuTexture));
                 break;
             }
-            level1 = std::rand() % 5;
-            prev = x;
-            x = random;
-
-            switch(level1){
+            position = std::rand() % 2;
+            
+            switch(position){
                 case 0:
-                prev += 200;
-                x += 340;
+                random += 300;
                 break;
-               
+
                 case 1:
-                prev += 140;
-                x += 360;
+                random += 350;
+                remember = 1;
                 break;
 
                 case 2:
-                prev += 240;
-                x += 240;
+                random += 210;
                 break;
-               
+
                 case 3:
-                prev += 200;
-                x += 460;
+                random += 270;
                 break;
-
-                case 4:
-                prev += 580;
-                x += 370;
-                break;
-
-                case 5:
-                prev += 600;
-                x += 400;
-                break;
-               
-                case 6:
-                prev += 560;
-                x += 480;
-                break;
-
-                case 7:
-                prev += 490;
-                x += 560;
-                break;
-               
-                case 8:
-                prev += 670;
-                x += 460;
-                break;
-
-                case 9:
-                prev += 580;
-                x += 400;
-                break;
-            }
-            if(x > prev){random = prev + (std::rand() % (x - prev + 1));}
-            else{random = prev;}
-
-            if(random - x < 70){
-                random += 100;
+                
             }
         }
     }
