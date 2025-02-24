@@ -18,6 +18,7 @@
 #include "procesor.h"
 #include "motherboard.h"
 #include "levels.h"
+#include "virus1.h"
 
 int main(){
     bool isStartMenu = true;
@@ -25,6 +26,7 @@ int main(){
     bool isInfoMenu = false;
     bool isPauseMenu = false;
     bool isBluescreen = false;
+    bool isLoos = false;
     bool devMode = true;
 
     int setLevel = 0;
@@ -62,6 +64,7 @@ int main(){
     sf::Texture ssdTexture;
     sf::Texture bluescreenTexture;
     sf::Texture mbTexture;
+    sf::Texture virusTexture;
     sf::Font fStart;
     sf::Font fPause;
     sf::RectangleShape player;
@@ -81,10 +84,16 @@ int main(){
     std::vector<GPU> graphics2;
     std::vector<CPU> centralUnit2;
     std::vector<MB> motherboard2;
+
+    std::vector<VIRUS1> vir1;
+    std::vector<CPU> centralUnit3;
+
     std::srand(std::time(nullptr));
     
     lv.level1(x, gpuTexture, graphics, cpuTexture, centralUnit, count, motherboard, mbTexture);
     lv.level2(storage2, x, ssdTexture, gpuTexture, graphics2, cpuTexture, centralUnit2, count, motherboard2, mbTexture);
+    lv.level3(centralUnit3, x, cpuTexture, virusTexture, vir1);
+
     py.PlayerBuild(player);
     float yPoz = player.getPosition().y;
 
@@ -122,6 +131,7 @@ int main(){
             py.PlayerMove(player);
             py.playerCrouch(player);
             blueScreen.setPosition(getX - 710.f, 1410);
+            std::cout << getX << '\n';
             if(!isPauseMenu){count += 1;}
             
             if(isBluescreen){
@@ -147,8 +157,11 @@ int main(){
                 if(getX < 15000){
                     setLevel = 1;
                 }
-                else if(getX > 15000){
+                else if(getX > 15000 && getX < 36000){
                     setLevel = 2;
+                }
+                else if(getX > 37000){
+                    setLevel = 3;
                 }
 
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
@@ -195,7 +208,15 @@ int main(){
                         obstacle4.mbColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
                     }
                     break;
-                    //level3
+                    
+                    case 3:
+                    for(auto &obstacle1 : vir1){
+                        obstacle1.virusColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
+                    }
+                    for(auto &obstacle2 : centralUnit3){
+                        obstacle2.cpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
+                    }
+                    break;
                 }
             }
         }
@@ -237,6 +258,15 @@ int main(){
                 }
                 for(auto &motherboards : motherboard2){
                     motherboards.drawMb(window);
+                }
+                break;
+
+                case 3:
+                for(auto &procesor : centralUnit3){
+                    procesor.drawCpu(window);
+                }
+                for(auto &vir : vir1){
+                    vir.drawVirus(window);
                 }
                 break;
             }

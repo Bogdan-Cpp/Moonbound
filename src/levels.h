@@ -3,7 +3,9 @@
 #include <SFML/Graphics.hpp>
 #include <optional>
 #include <iostream>
+#include <vector>
 #include "player.h"
+#include "virus1.h"
 
 class Level{
     public:
@@ -18,17 +20,9 @@ class Level{
             obstacle = std::rand() % 4;
         
             switch(obstacle){
-                case 0:
-                motherboard.push_back(MB(random, 1920, mbTexture));
-                break;
-
-                case 1:
-                motherboard.push_back(MB(random, 1920, mbTexture));
-                break;
-
-                case 2:
-                motherboard.push_back(MB(random, 1920, mbTexture));
-                break;
+                case 0: motherboard.push_back(MB(random, 1920, mbTexture)); break;
+                case 1: motherboard.push_back(MB(random, 1920, mbTexture)); break;
+                case 2: motherboard.push_back(MB(random, 1920, mbTexture)); break;
             
                 case 3:
                 graphics.push_back(GPU(random, 1920, 0, gpuTexture));
@@ -40,30 +34,11 @@ class Level{
             x = random;
 
             switch(level1){
-                case 0:
-                prev += 600;
-                x += 400;
-                break;
-               
-                case 1:
-                prev += 560;
-                x += 480;
-                break;
-
-                case 2:
-                prev += 490;
-                x += 560;
-                break;
-               
-                case 3:
-                prev += 670;
-                x += 460;
-                break;
-
-                case 4:
-                prev += 580;
-                x += 400;
-                break;
+                case 0: prev += 600; x += 400; break;
+                case 1: prev += 560; x += 480; break;
+                case 2: prev += 490; x += 560; break;
+                case 3: prev += 670; x += 460; break;
+                case 4: prev += 580; x += 400; break;
             }
             if(x > prev){random = prev + (std::rand() % (x - prev + 1));}
             else{random = prev;}
@@ -81,38 +56,40 @@ class Level{
             obstacle = std::rand() % 3;
 
             switch(obstacle){
-                case 0:
-                storage2.push_back(Ssd(random, 1940, ssdTexture));
-                break;
-
-                case 1:
-                graphics2.push_back(GPU(random, 1920, 0, gpuTexture));
-                break;
-
-                case 2:
-                graphics2.push_back(GPU(random, 1910, 90, gpuTexture));
-                break;
+                case 0: storage2.push_back(Ssd(random, 1940, ssdTexture)); break;
+                case 1: graphics2.push_back(GPU(random, 1920, 0, gpuTexture)); break;
+                case 2: graphics2.push_back(GPU(random, 1910, 90, gpuTexture)); break;
             }
             position = std::rand() % 2;
             
             switch(position){
-                case 0:
-                random += 300;
-                break;
+                case 0: random += 300; break;
+                case 1: random += 350; break;
+                case 2: random += 210; break;
+                case 3: random += 270; break;
+            }
+        }
+    }
 
-                case 1:
-                random += 350;
-                remember = 1;
-                break;
+    void level3(std::vector<CPU> &centralUnit3, int &x, sf::Texture &cpuTexture, sf::Texture &virusTexture, std::vector<VIRUS1> &vir1){
+        x = 37500;
+        int obstacle;
+        int position;
+        int random = x;
 
-                case 2:
-                random += 210;
-                break;
+        for(int i = 0; i <= 80; i++){
+            obstacle = std::rand() % 2;
 
-                case 3:
-                random += 270;
-                break;
-                
+            switch(obstacle){
+                case 0: vir1.push_back(VIRUS1(random, 1920, virusTexture)); break;
+                case 1: centralUnit3.push_back(CPU(random, 1920, cpuTexture)); break;
+            }
+
+            position = std::rand() % 2;
+
+            switch(position){
+                case 0: random += 300; break;
+                case 1: random += 450; break;
             }
         }
     }
