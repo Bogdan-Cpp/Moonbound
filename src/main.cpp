@@ -26,7 +26,6 @@ int main(){
     bool isInfoMenu = false;
     bool isPauseMenu = false;
     bool isBluescreen = false;
-    bool isLoos = false;
     bool devMode = true;
 
     int setLevel = 0;
@@ -130,9 +129,9 @@ int main(){
             sr->ObjectPosition(floor1);
             py.PlayerMove(player);
             py.playerCrouch(player);
-            blueScreen.setPosition(getX - 710.f, 1410);
             std::cout << getX << '\n';
             if(!isPauseMenu){count += 1;}
+            blueScreen.setPosition(getX - 710.f, 1410);
             
             if(isBluescreen){
                 //if is bluescreen

@@ -19,7 +19,7 @@ class VIRUS1{
             throw std::runtime_error("virus texture was not found!");
         }
         this->virus.setTexture(virusTexture);
-        virus.setScale(0.2f, 0.2f);
+        virus.setScale(0.1f, 0.1f);
         virus.setPosition(sf::Vector2f(xPoz, yPoz));
     }
 

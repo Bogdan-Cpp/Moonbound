@@ -79,9 +79,13 @@ class Level{
 
         for(int i = 0; i <= 80; i++){
             obstacle = std::rand() % 2;
+            int size = std::rand() % 2;
 
             switch(obstacle){
-                case 0: vir1.push_back(VIRUS1(random, 1920, virusTexture)); break;
+                case 0:
+                if(size == 0){vir1.push_back(VIRUS1(random, 1920, 0.2f, 0.2f, virusTexture));}
+                else if(size == 1){vir1.push_back(VIRUS1(random, 1920, 0.1f, 0.1f, virusTexture));}
+                break;
                 case 1: centralUnit3.push_back(CPU(random, 1920, cpuTexture)); break;
             }
 

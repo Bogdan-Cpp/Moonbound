@@ -10,16 +10,20 @@ class VIRUS1{
     sf::Sprite virus;
     float xPoz;
     float yPoz;
+    float width;
+    float height;
     
-    VIRUS1(float xPoz, float yPoz, sf::Texture &virusTexture){
+    VIRUS1(float xPoz, float yPoz, float width, float height, sf::Texture &virusTexture){
         this->xPoz = xPoz;
         this->yPoz = yPoz;
+        this->width = width;
+        this->height = height;
 
         if(!virusTexture.loadFromFile("../assets/virus.png")){
             throw std::runtime_error("virus texture was not found!");
         }
         this->virus.setTexture(virusTexture);
-        virus.setScale(0.2f, 0.2f);
+        virus.setScale(width, height);
         virus.setPosition(sf::Vector2f(xPoz, yPoz));
     }
 
