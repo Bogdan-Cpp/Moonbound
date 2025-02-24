@@ -43,7 +43,7 @@ class VIRUS1{
             }
             isBluescreen = true;
 
-            player.setPosition(sf::Vector2f(35000.f, 1950.f));
+            player.setPosition(sf::Vector2f(100.f, 1950.f));
             sr = new Start();
             isGameMenu = true;
             count = 0;

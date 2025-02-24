@@ -26,7 +26,7 @@ int main(){
     bool isInfoMenu = false;
     bool isPauseMenu = false;
     bool isBluescreen = false;
-    bool devMode = true;
+    bool devMode = false;
 
     int setLevel = 0;
     bool shouldGenerate = true;
@@ -72,6 +72,7 @@ int main(){
     Player py;
     sf::Image image;
     sf::Text msg1("Be careful because your \n GPU might be in fire!", fPause, 40);
+    sf::Text msg2("Task Manager says everything is fine...\n but I feel like an IMPOSTOR virus is running in the background!", fPause, 40);
     sf::View camera(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920.f, 1080.f)));
     sf::Music *startMusic = new sf::Music();
     int x = 3000;
@@ -86,12 +87,13 @@ int main(){
 
     std::vector<VIRUS1> vir1;
     std::vector<CPU> centralUnit3;
+    std::vector<GPU> graphics3;
 
     std::srand(std::time(nullptr));
     
     lv.level1(x, gpuTexture, graphics, cpuTexture, centralUnit, count, motherboard, mbTexture);
     lv.level2(storage2, x, ssdTexture, gpuTexture, graphics2, cpuTexture, centralUnit2, count, motherboard2, mbTexture);
-    lv.level3(centralUnit3, x, cpuTexture, virusTexture, vir1);
+    lv.level3(centralUnit3, x, cpuTexture, virusTexture, vir1, graphics3, gpuTexture);
 
     py.PlayerBuild(player);
     float yPoz = player.getPosition().y;
@@ -110,6 +112,8 @@ int main(){
     blueScreen.setScale(1.f, 1.f);
     msg1.setFillColor(sf::Color::White);
     msg1.setPosition(15500.f, 1890.f);
+    msg2.setFillColor(sf::Color::White);
+    msg2.setPosition(36000.f, 1890.f);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -150,7 +154,7 @@ int main(){
             }
             else{
                 //normal
-                prevSpeed = 10.f;
+                prevSpeed = 8.f;
                 py.speed = prevSpeed;
                 
                 if(getX < 15000){
@@ -215,6 +219,9 @@ int main(){
                     for(auto &obstacle2 : centralUnit3){
                         obstacle2.cpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
                     }
+                    for(auto &obstacle3 : graphics3){
+                        obstacle3.gpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen); 
+                    }
                     break;
                 }
             }
@@ -231,6 +238,7 @@ int main(){
             sr->Scor(fStart, window, getX, count, prev, best);
             sr->ObjectDraw(window, floor1, player);
             window.draw(msg1);
+            window.draw(msg2);
 
             switch(setLevel){
                 case 1:
@@ -266,6 +274,9 @@ int main(){
                 }
                 for(auto &vir : vir1){
                     vir.drawVirus(window);
+                }
+                for(auto &graphic : graphics3){
+                    graphic.drawGpu(window);
                 }
                 break;
             }

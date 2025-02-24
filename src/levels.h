@@ -71,24 +71,24 @@ class Level{
         }
     }
 
-    void level3(std::vector<CPU> &centralUnit3, int &x, sf::Texture &cpuTexture, sf::Texture &virusTexture, std::vector<VIRUS1> &vir1){
-        x = 37500;
+    void level3(std::vector<CPU> &centralUnit3, int &x, sf::Texture &cpuTexture, sf::Texture &virusTexture, std::vector<VIRUS1> &vir1, std::vector<GPU> &graphics3, sf::Texture &gpuTexture){
+        x = 38500;
         int obstacle;
         int position;
         int random = x;
 
         for(int i = 0; i <= 80; i++){
-            obstacle = std::rand() % 2;
+            obstacle = std::rand() % 6;
             int size = std::rand() % 2;
 
             switch(obstacle){
-                case 0:
-                if(size == 0){vir1.push_back(VIRUS1(random, 1920, 0.2f, 0.2f, virusTexture));}
-                else if(size == 1){vir1.push_back(VIRUS1(random, 1920, 0.1f, 0.1f, virusTexture));}
-                break;
-                case 1: centralUnit3.push_back(CPU(random, 1920, cpuTexture)); break;
+                case 0: vir1.push_back(VIRUS1(random, 1920, 0.2f, 0.2f, virusTexture)); break;
+                case 1: vir1.push_back(VIRUS1(random, 1920, 0.1f, 0.1f, virusTexture)); break;
+                case 2: centralUnit3.push_back(CPU(random, 1920, cpuTexture)); break;
+                case 3: graphics3.push_back(GPU(random, 1925, 140, gpuTexture)); break;
+                case 4: graphics3.push_back(GPU(random, 1940, 90, gpuTexture)); break;
+                case 5: graphics3.push_back(GPU(random, 1925, 70, gpuTexture)); break;
             }
-
             position = std::rand() % 2;
 
             switch(position){
