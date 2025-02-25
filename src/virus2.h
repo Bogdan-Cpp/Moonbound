@@ -5,13 +5,13 @@
 #include <iostream>
 #include "player.h"
 
-class VIRUS1{
+class VIRUS2{
     public:
     sf::Sprite virus;
     float xPoz;
     float yPoz;
     
-    VIRUS1(float xPoz, float yPoz, sf::Texture &virusTexture){
+    VIRUS2(float xPoz, float yPoz, sf::Texture &virusTexture){
         this->xPoz = xPoz;
         this->yPoz = yPoz;
 
@@ -27,22 +27,15 @@ class VIRUS1{
         window.draw(virus);
     }
 
-    void virusColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best, bool &isBluescreen){
+    void virusColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best, bool &isBluescreen, float &playerSize){
         if(player.getGlobalBounds().intersects(virus.getGlobalBounds())){
-            isGameMenu = false;
-            delete sr;
-            sr = nullptr;
+            int choose = std::rand() % 3;
 
-            prev = count;
-            if(count > best){
-                best = count;
+            switch(choose){
+                case 0: playerSize += 1.f; break;
+                case 1: playerSize += 1.f; break;
+                case 2: playerSize += 1.f; break;
             }
-            isBluescreen = true;
-
-            player.setPosition(sf::Vector2f(35000.f, 1950.f));
-            sr = new Start();
-            isGameMenu = true;
-            count = 0;
         }
     }
 };

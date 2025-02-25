@@ -19,6 +19,7 @@
 #include "motherboard.h"
 #include "levels.h"
 #include "virus1.h"
+#include "virus2.h"
 
 int main(){
     bool isStartMenu = true;
@@ -26,7 +27,7 @@ int main(){
     bool isInfoMenu = false;
     bool isPauseMenu = false;
     bool isBluescreen = false;
-    bool devMode = false;
+    bool devMode = true;
 
     int setLevel = 0;
     bool shouldGenerate = true;
@@ -35,6 +36,7 @@ int main(){
     long long prev = 0;
     long long best = 0;
     float prevSpeed;
+    float playerSize = 50.f;
 
     auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "Moonbound");
     window.setFramerateLimit(120);
@@ -89,13 +91,17 @@ int main(){
     std::vector<CPU> centralUnit3;
     std::vector<GPU> graphics3;
 
+    std::vector<VIRUS1> vir2;
+    std::vector<VIRUS2> vir3;
+
     std::srand(std::time(nullptr));
     
     lv.level1(x, gpuTexture, graphics, cpuTexture, centralUnit, count, motherboard, mbTexture);
     lv.level2(storage2, x, ssdTexture, gpuTexture, graphics2, cpuTexture, centralUnit2, count, motherboard2, mbTexture);
     lv.level3(centralUnit3, x, cpuTexture, virusTexture, vir1, graphics3, gpuTexture);
+    lv.level4(vir2, vir3, virusTexture, x);
 
-    py.PlayerBuild(player);
+    py.PlayerBuild(player, playerSize);
     float yPoz = player.getPosition().y;
 
     //file verification
@@ -132,7 +138,7 @@ int main(){
             window.setView(camera);
             sr->ObjectPosition(floor1);
             py.PlayerMove(player);
-            py.playerCrouch(player);
+            py.playerCrouch(player, playerSize);
             std::cout << getX << '\n';
             if(!isPauseMenu){count += 1;}
             blueScreen.setPosition(getX - 710.f, 1410);
@@ -163,8 +169,11 @@ int main(){
                 else if(getX > 15000 && getX < 36000){
                     setLevel = 2;
                 }
-                else if(getX > 37000){
+                else if(getX > 37000 && getX < 37000){
                     setLevel = 3;
+                }
+                else if(getX > 70000){
+                    setLevel = 4;
                 }
 
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
@@ -214,7 +223,7 @@ int main(){
                     
                     case 3:
                     for(auto &obstacle1 : vir1){
-                        obstacle1.virusColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
+                        obstacle1.virusColide(player, sr, isGameMenu, count, prev, best, isBluescreen, playerSize);
                     }
                     for(auto &obstacle2 : centralUnit3){
                         obstacle2.cpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
@@ -223,6 +232,14 @@ int main(){
                         obstacle3.gpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen); 
                     }
                     break;
+
+                    case 4:
+                    for(auto &obstacle1 : vir2){
+                        obstacle1.virusColide(player, sr, isGameMenu, count, prev, best, isBluescreen, playerSize);
+                    }
+                    for(auto &obstacle2 : vir3){
+                        obstacle2.virusColide(player, sr, isGameMenu, count, prev, best, isBluescreen, playerSize);
+                    }
                 }
             }
         }
@@ -241,6 +258,7 @@ int main(){
             window.draw(msg2);
 
             switch(setLevel){
+                //draw 1
                 case 1:
                 for(auto &graphic : graphics){
                     graphic.drawGpu(window);
@@ -252,7 +270,7 @@ int main(){
                     motherboards.drawMb(window);
                 }
                 break;
-
+                //draw 2
                 case 2:
                 for(auto &storages : storage2){
                     storages.drawSsd(window);
@@ -267,7 +285,7 @@ int main(){
                     motherboards.drawMb(window);
                 }
                 break;
-
+                //draw 3
                 case 3:
                 for(auto &procesor : centralUnit3){
                     procesor.drawCpu(window);
@@ -277,6 +295,15 @@ int main(){
                 }
                 for(auto &graphic : graphics3){
                     graphic.drawGpu(window);
+                }
+                break;
+                //draw 4
+                case 4:
+                for(auto &vir_1 : vir2){
+                    vir_1.drawVirus(window);
+                }
+                for(auto &vir_2 : vir3){
+                    vir_2.drawVirus(window);
                 }
                 break;
             }

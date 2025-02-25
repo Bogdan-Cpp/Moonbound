@@ -31,7 +31,7 @@ class VIRUS1{
         window.draw(virus);
     }
 
-    void virusColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best, bool &isBluescreen){
+    void virusColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best, bool &isBluescreen, float &playerSize){
         if(player.getGlobalBounds().intersects(virus.getGlobalBounds())){
             isGameMenu = false;
             delete sr;
@@ -43,10 +43,11 @@ class VIRUS1{
             }
             isBluescreen = true;
 
-            player.setPosition(sf::Vector2f(100.f, 1950.f));
+            player.setPosition(sf::Vector2f(70000.f, 1950.f));
             sr = new Start();
             isGameMenu = true;
             count = 0;
+            playerSize = 50.f;
         }
     }
 };

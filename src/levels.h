@@ -6,6 +6,7 @@
 #include <vector>
 #include "player.h"
 #include "virus1.h"
+#include "virus2.h"
 
 class Level{
     public:
@@ -94,6 +95,29 @@ class Level{
             switch(position){
                 case 0: random += 300; break;
                 case 1: random += 450; break;
+            }
+        }
+    }
+    
+    void level4(std::vector<VIRUS1> &vir2, std::vector<VIRUS2> &vir3, sf::Texture &virusTexture, int &x){
+        x = 72000;
+        int obstacle;
+        int position;
+        int random = x;
+
+        for(int i = 0; i <= 80; i++){
+            obstacle = rand() % 2;
+            
+            switch(obstacle){
+                case 0: vir2.push_back(VIRUS1(random, 1920, 0.2f, 0.2f, virusTexture)); break;
+                case 1: vir3.push_back(VIRUS2(random, 1920, virusTexture)); break;
+            }
+
+            position = rand() % 2;
+
+            switch(position){
+                case 0: random += 260; break;
+                case 1: random += 340; break;
             }
         }
     }

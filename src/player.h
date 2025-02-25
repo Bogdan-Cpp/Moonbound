@@ -13,23 +13,24 @@ class Player{
   float gravity = -1.67f;
   float temp = 25.f;
   float jumpSpeed = 0.f;
-  float groundLevel = 1950.f;
+  float groundLevel = 2000.f;
   float jumpingAnimation = 0;
   
-   void PlayerBuild(sf::RectangleShape &player){
+   void PlayerBuild(sf::RectangleShape &player, float &playerSize){
       player.setFillColor(sf::Color(120, 120, 120));
-      player.setSize(sf::Vector2f(50.f, 50.f));
-      player.setPosition(sf::Vector2f(100.f, 1950.f));
+      player.setSize(sf::Vector2f(playerSize, playerSize));
+      player.setOrigin(0.f, playerSize);
+      player.setPosition(sf::Vector2f(70000.f, groundLevel - playerSize));
    }
 
-   void playerCrouch(sf::RectangleShape &player){
+   void playerCrouch(sf::RectangleShape &player, float &playerSize){
       if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)){
-         player.setSize(sf::Vector2f(25.f, 25.f));
-         player.setOrigin(0.f, -25.f);
+         player.setSize(sf::Vector2f((playerSize / 2), (playerSize / 2)));
+         player.setOrigin(0.f, (playerSize / 2));
       }
       else{
-         player.setSize(sf::Vector2f(50.f, 50.f));
-         player.setOrigin(0.f, 0.f);
+         player.setSize(sf::Vector2f(playerSize, playerSize));
+         player.setOrigin(0.f, playerSize);
       }
    }
 
@@ -49,8 +50,6 @@ class Player{
             player.setPosition(player.getPosition().x, groundLevel);
             isJumping = false; 
             jumpSpeed = 0.f;
-
-            player.setRotation(std::round(player.getRotation() / 90) * 90);
          }
       }
    }
