@@ -27,7 +27,7 @@ int main(){
     bool isInfoMenu = false;
     bool isPauseMenu = false;
     bool isBluescreen = false;
-    bool devMode = true;
+    bool devMode = false;
 
     int setLevel = 0;
     bool shouldGenerate = true;
@@ -37,6 +37,7 @@ int main(){
     long long best = 0;
     float prevSpeed;
     float playerSize = 50.f;
+    int stage = 0;
 
     auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "Moonbound");
     window.setFramerateLimit(120);
@@ -134,15 +135,21 @@ int main(){
         else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !isStartMenu && isInfoMenu){in->infoMenuQuit(in, ms, isInfoMenu, isStartMenu);}
         
         if(isGameMenu){
+            
             camera.setCenter(player.getPosition().x + 250, yPoz);
             window.setView(camera);
             sr->ObjectPosition(floor1);
             py.PlayerMove(player);
             py.playerCrouch(player, playerSize);
             std::cout << getX << '\n';
-            if(!isPauseMenu){count += 1;}
             blueScreen.setPosition(getX - 710.f, 1410);
             
+            //player speed
+            if(stage == 1){prevSpeed = 12.f;}
+            else if(stage == 2){prevSpeed = 3.f;}
+            else{prevSpeed = 8.f;}
+
+            if(!isPauseMenu){count += 1;}
             if(isBluescreen){
                 //if is bluescreen
                 gameMusic.stop();
@@ -160,7 +167,6 @@ int main(){
             }
             else{
                 //normal
-                prevSpeed = 8.f;
                 py.speed = prevSpeed;
                 
                 if(getX < 15000){
@@ -223,7 +229,7 @@ int main(){
                     
                     case 3:
                     for(auto &obstacle1 : vir1){
-                        obstacle1.virusColide(player, sr, isGameMenu, count, prev, best, isBluescreen, playerSize);
+                        obstacle1.virusColide(player, sr, isGameMenu, count, prev, best, isBluescreen, playerSize, stage);
                     }
                     for(auto &obstacle2 : centralUnit3){
                         obstacle2.cpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
@@ -235,10 +241,10 @@ int main(){
 
                     case 4:
                     for(auto &obstacle1 : vir2){
-                        obstacle1.virusColide(player, sr, isGameMenu, count, prev, best, isBluescreen, playerSize);
+                        obstacle1.virusColide(player, sr, isGameMenu, count, prev, best, isBluescreen, playerSize, stage);
                     }
                     for(auto &obstacle2 : vir3){
-                        obstacle2.virusColide(player, sr, isGameMenu, count, prev, best, isBluescreen, playerSize);
+                        obstacle2.virusColide(player, sr, isGameMenu, count, prev, best, isBluescreen, stage);
                     }
                 }
             }

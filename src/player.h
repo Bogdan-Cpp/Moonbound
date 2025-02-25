@@ -13,24 +13,23 @@ class Player{
   float gravity = -1.67f;
   float temp = 25.f;
   float jumpSpeed = 0.f;
-  float groundLevel = 2000.f;
+  float groundLevel = 1950.f;
   float jumpingAnimation = 0;
   
    void PlayerBuild(sf::RectangleShape &player, float &playerSize){
       player.setFillColor(sf::Color(120, 120, 120));
       player.setSize(sf::Vector2f(playerSize, playerSize));
-      player.setOrigin(0.f, playerSize);
-      player.setPosition(sf::Vector2f(70000.f, groundLevel - playerSize));
+      player.setPosition(sf::Vector2f(70000.f, groundLevel));
    }
 
    void playerCrouch(sf::RectangleShape &player, float &playerSize){
       if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)){
          player.setSize(sf::Vector2f((playerSize / 2), (playerSize / 2)));
-         player.setOrigin(0.f, (playerSize / 2));
+         player.setOrigin(0.f, -25.f);
       }
       else{
          player.setSize(sf::Vector2f(playerSize, playerSize));
-         player.setOrigin(0.f, playerSize);
+         player.setOrigin(0.f, 0.f);
       }
    }
 

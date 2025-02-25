@@ -31,7 +31,7 @@ class VIRUS1{
         window.draw(virus);
     }
 
-    void virusColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best, bool &isBluescreen, float &playerSize){
+    void virusColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best, bool &isBluescreen, float &playerSize, int &stage){
         if(player.getGlobalBounds().intersects(virus.getGlobalBounds())){
             isGameMenu = false;
             delete sr;
@@ -47,7 +47,7 @@ class VIRUS1{
             sr = new Start();
             isGameMenu = true;
             count = 0;
-            playerSize = 50.f;
+            stage = 0;
         }
     }
 };

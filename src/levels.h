@@ -106,17 +106,46 @@ class Level{
         int random = x;
 
         for(int i = 0; i <= 80; i++){
-            obstacle = rand() % 2;
+            obstacle = rand() % 12;
             
             switch(obstacle){
                 case 0: vir2.push_back(VIRUS1(random, 1920, 0.2f, 0.2f, virusTexture)); break;
-                case 1: vir3.push_back(VIRUS2(random, 1920, virusTexture)); break;
+                case 1: vir3.push_back(VIRUS2(random, 1920, 0.2f, 0.2f, virusTexture)); break;
+                case 2: vir2.push_back(VIRUS1(random, 1893, 0.2f, 0.2f, virusTexture)); break;
+                case 3: vir3.push_back(VIRUS2(random, 1893, 0.2f, 0.2f, virusTexture)); break;
+                case 4: vir2.push_back(VIRUS1(random, 1900, 0.1f, 0.1f, virusTexture)); break;
+                case 5: vir3.push_back(VIRUS2(random, 1900, 0.1f, 0.1f, virusTexture)); break;
+                case 6: vir2.push_back(VIRUS1(random, 1920, 0.1f, 0.1f, virusTexture)); break;
+                case 7: vir3.push_back(VIRUS2(random, 1920, 0.1f, 0.1f, virusTexture)); break;
+
+                case 8:
+                vir2.push_back(VIRUS1(random, 1920, 0.2f, 0.2f, virusTexture));
+                vir2.push_back(VIRUS1(random + 2, 1910, 0.1f, 0.1f, virusTexture));
+                break;
+
+                case 9:
+                vir2.push_back(VIRUS1(random, 1920, 0.2f, 0.2f, virusTexture));
+                vir2.push_back(VIRUS1(random + 2, 1910, 0.1f, 0.1f, virusTexture));
+                vir2.push_back(VIRUS1(random + 45, 1907, 0.1f, 0.1f, virusTexture));
+                break;
+
+                case 10:
+                vir3.push_back(VIRUS2(random, 1920, 0.2f, 0.2f, virusTexture));
+                vir3.push_back(VIRUS2(random + 2, 1910, 0.1f, 0.1f, virusTexture));
+                vir3.push_back(VIRUS2(random + 45, 1907, 0.1f, 0.1f, virusTexture));
+                break;
+
+                case 11:
+                vir3.push_back(VIRUS2(random, 1893, 0.2f, 0.2f, virusTexture));
+                vir3.push_back(VIRUS2(random + 2, 1883, 0.1f, 0.1f, virusTexture));
+                vir3.push_back(VIRUS2(random + 45, 1880, 0.1f, 0.1f, virusTexture));
+                break;
             }
 
             position = rand() % 2;
 
             switch(position){
-                case 0: random += 260; break;
+                case 0: random += 340; break;
                 case 1: random += 340; break;
             }
         }
