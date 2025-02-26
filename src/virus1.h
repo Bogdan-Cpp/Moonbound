@@ -13,16 +13,30 @@ class VIRUS1{
     float width;
     float height;
     
-    VIRUS1(float xPoz, float yPoz, float width, float height, sf::Texture &virusTexture){
+    VIRUS1(float xPoz, float yPoz, float width, float height, sf::Texture &virusTexture, sf::Texture &virusTexture2){
+        int texture = std::rand() % 2;
         this->xPoz = xPoz;
         this->yPoz = yPoz;
         this->width = width;
         this->height = height;
+        
+        switch(texture){
+            case 0:
+            if(!virusTexture.loadFromFile("../assets/virus.png")){
+                throw std::runtime_error("virus texture was not found!");
+            }
+            this->virus.setTexture(virusTexture);
+            break;
 
-        if(!virusTexture.loadFromFile("../assets/virus.png")){
-            throw std::runtime_error("virus texture was not found!");
+            case 1:
+            if(!virusTexture2.loadFromFile("../assets/virus2.png")){
+                throw std::runtime_error("virus texture was not found!");
+            }
+            this->virus.setTexture(virusTexture2);
+            break;
         }
-        this->virus.setTexture(virusTexture);
+        
+        
         virus.setScale(width, height);
         virus.setPosition(sf::Vector2f(xPoz, yPoz));
     }
@@ -43,7 +57,7 @@ class VIRUS1{
             }
             isBluescreen = true;
 
-            player.setPosition(sf::Vector2f(70000.f, 1950.f));
+            player.setPosition(sf::Vector2f(100.f, 1950.f));
             sr = new Start();
             isGameMenu = true;
             count = 0;

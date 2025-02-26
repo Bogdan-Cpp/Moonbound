@@ -10,7 +10,10 @@
 
 class Level{
     public:
-    void level1(int &x, sf::Texture &gpuTexture, std::vector<GPU> &graphics, sf::Texture &cpuTexture, std::vector<CPU> &centralUnit, long long &count, std::vector<MB> &motherboard, sf::Texture &mbTexture){
+    void level1(int &x, sf::Texture &gpuTexture, std::vector<GPU> &graphics,
+        sf::Texture &cpuTexture, std::vector<CPU> &centralUnit, long long &count,
+        std::vector<MB> &motherboard, sf::Texture &mbTexture){
+        
         int prev = 0;
         int random = x;
         int level1;
@@ -46,7 +49,11 @@ class Level{
         }
     }
 
-    void level2(std::vector<Ssd> &storage2, int &x, sf::Texture &ssdTexture, sf::Texture &gpuTexture, std::vector<GPU> &graphics2, sf::Texture &cpuTexture, std::vector<CPU> &centralUnit2, long long &count, std::vector<MB> &motherboard2, sf::Texture &mbTexture){
+    void level2(std::vector<Ssd> &storage2, int &x, sf::Texture &ssdTexture,
+        sf::Texture &gpuTexture, std::vector<GPU> &graphics2,
+        sf::Texture &cpuTexture, std::vector<CPU> &centralUnit2,
+        long long &count, std::vector<MB> &motherboard2, sf::Texture &mbTexture){
+        
         x = 17500;
         int obstacle;
         int position;
@@ -72,7 +79,10 @@ class Level{
         }
     }
 
-    void level3(std::vector<CPU> &centralUnit3, int &x, sf::Texture &cpuTexture, sf::Texture &virusTexture, std::vector<VIRUS1> &vir1, std::vector<GPU> &graphics3, sf::Texture &gpuTexture){
+    void level3(std::vector<CPU> &centralUnit3, int &x, sf::Texture &cpuTexture,
+        sf::Texture &virusTexture, std::vector<VIRUS1> &vir1, std::vector<GPU> &graphics3,
+        sf::Texture &gpuTexture, sf::Texture &virusTexture2){
+        
         x = 38500;
         int obstacle;
         int position;
@@ -83,8 +93,8 @@ class Level{
             int size = std::rand() % 2;
 
             switch(obstacle){
-                case 0: vir1.push_back(VIRUS1(random, 1920, 0.2f, 0.2f, virusTexture)); break;
-                case 1: vir1.push_back(VIRUS1(random, 1920, 0.1f, 0.1f, virusTexture)); break;
+                case 0: vir1.push_back(VIRUS1(random, 1920, 0.2f, 0.2f, virusTexture, virusTexture2)); break;
+                case 1: vir1.push_back(VIRUS1(random, 1920, 0.1f, 0.1f, virusTexture, virusTexture2)); break;
                 case 2: centralUnit3.push_back(CPU(random, 1920, cpuTexture)); break;
                 case 3: graphics3.push_back(GPU(random, 1925, 140, gpuTexture)); break;
                 case 4: graphics3.push_back(GPU(random, 1940, 90, gpuTexture)); break;
@@ -99,7 +109,9 @@ class Level{
         }
     }
     
-    void level4(std::vector<VIRUS1> &vir2, std::vector<VIRUS2> &vir3, sf::Texture &virusTexture, int &x){
+    void level4(std::vector<VIRUS1> &vir2, std::vector<VIRUS2> &vir3, 
+        sf::Texture &virusTexture, int &x, sf::Texture &virusTexture2){
+        
         x = 72000;
         int obstacle;
         int position;
@@ -109,44 +121,56 @@ class Level{
             obstacle = rand() % 12;
             
             switch(obstacle){
-                case 0: vir2.push_back(VIRUS1(random, 1920, 0.2f, 0.2f, virusTexture)); break;
-                case 1: vir3.push_back(VIRUS2(random, 1920, 0.2f, 0.2f, virusTexture)); break;
-                case 2: vir2.push_back(VIRUS1(random, 1893, 0.2f, 0.2f, virusTexture)); break;
-                case 3: vir3.push_back(VIRUS2(random, 1893, 0.2f, 0.2f, virusTexture)); break;
-                case 4: vir2.push_back(VIRUS1(random, 1900, 0.1f, 0.1f, virusTexture)); break;
-                case 5: vir3.push_back(VIRUS2(random, 1900, 0.1f, 0.1f, virusTexture)); break;
-                case 6: vir2.push_back(VIRUS1(random, 1920, 0.1f, 0.1f, virusTexture)); break;
-                case 7: vir3.push_back(VIRUS2(random, 1920, 0.1f, 0.1f, virusTexture)); break;
+                case 0: vir2.push_back(VIRUS1(random, 1920, 0.2f, 0.2f, virusTexture, virusTexture2)); break;
+                case 1: vir3.push_back(VIRUS2(random, 1920, 0.2f, 0.2f, virusTexture, virusTexture2)); break;
+                case 2: vir2.push_back(VIRUS1(random, 1893, 0.2f, 0.2f, virusTexture, virusTexture2)); break;
+                case 3: vir3.push_back(VIRUS2(random, 1893, 0.2f, 0.2f, virusTexture, virusTexture2)); break;
+                case 4: vir2.push_back(VIRUS1(random, 1900, 0.1f, 0.1f, virusTexture, virusTexture2)); break;
+                case 5: vir3.push_back(VIRUS2(random, 1900, 0.1f, 0.1f, virusTexture, virusTexture2)); break;
+                case 6: vir2.push_back(VIRUS1(random, 1920, 0.1f, 0.1f, virusTexture, virusTexture2)); break;
+                case 7: vir3.push_back(VIRUS2(random, 1920, 0.1f, 0.1f, virusTexture, virusTexture2)); break;
 
                 case 8:
-                vir2.push_back(VIRUS1(random, 1920, 0.2f, 0.2f, virusTexture));
-                vir2.push_back(VIRUS1(random + 2, 1910, 0.1f, 0.1f, virusTexture));
+                vir2.push_back(VIRUS1(random, 1920, 0.2f, 0.2f, virusTexture, virusTexture2));
+                vir2.push_back(VIRUS1(random + 2, 1910, 0.1f, 0.1f, virusTexture, virusTexture2));
                 break;
 
                 case 9:
-                vir2.push_back(VIRUS1(random, 1920, 0.2f, 0.2f, virusTexture));
-                vir2.push_back(VIRUS1(random + 2, 1910, 0.1f, 0.1f, virusTexture));
-                vir2.push_back(VIRUS1(random + 45, 1907, 0.1f, 0.1f, virusTexture));
+                vir2.push_back(VIRUS1(random, 1920, 0.2f, 0.2f, virusTexture, virusTexture2));
+                vir2.push_back(VIRUS1(random + 2, 1910, 0.1f, 0.1f, virusTexture, virusTexture2));
+                vir2.push_back(VIRUS1(random + 45, 1907, 0.1f, 0.1f, virusTexture, virusTexture2));
                 break;
 
                 case 10:
-                vir3.push_back(VIRUS2(random, 1920, 0.2f, 0.2f, virusTexture));
-                vir3.push_back(VIRUS2(random + 2, 1910, 0.1f, 0.1f, virusTexture));
-                vir3.push_back(VIRUS2(random + 45, 1907, 0.1f, 0.1f, virusTexture));
+                vir3.push_back(VIRUS2(random, 1920, 0.2f, 0.2f, virusTexture, virusTexture2));
+                vir3.push_back(VIRUS2(random + 2, 1910, 0.1f, 0.1f, virusTexture, virusTexture2));
+                vir3.push_back(VIRUS2(random + 45, 1907, 0.1f, 0.1f, virusTexture, virusTexture2));
                 break;
 
                 case 11:
-                vir3.push_back(VIRUS2(random, 1893, 0.2f, 0.2f, virusTexture));
-                vir3.push_back(VIRUS2(random + 2, 1883, 0.1f, 0.1f, virusTexture));
-                vir3.push_back(VIRUS2(random + 45, 1880, 0.1f, 0.1f, virusTexture));
+                vir3.push_back(VIRUS2(random, 1893, 0.2f, 0.2f, virusTexture, virusTexture2));
+                vir3.push_back(VIRUS2(random + 2, 1883, 0.1f, 0.1f, virusTexture, virusTexture2));
+                vir3.push_back(VIRUS2(random + 45, 1880, 0.1f, 0.1f, virusTexture, virusTexture2));
                 break;
             }
 
-            position = rand() % 2;
+            
+
+            if(obstacle == 4 || obstacle == 5 || obstacle == 6 || obstacle == 7){
+                position = (rand() % 5) + 2;
+            }
+            else{
+                position = rand() % 3;
+            }
 
             switch(position){
                 case 0: random += 340; break;
                 case 1: random += 340; break;
+                case 2: random += 430; break;
+                case 3: random += 200; break;
+                case 4: random += 210; break;
+                case 5: random += 270; break;
+                case 6: random += 180; break;
             }
         }
     }

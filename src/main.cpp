@@ -27,7 +27,7 @@ int main(){
     bool isInfoMenu = false;
     bool isPauseMenu = false;
     bool isBluescreen = false;
-    bool devMode = false;
+    bool devMode = true;
 
     int setLevel = 0;
     bool shouldGenerate = true;
@@ -67,6 +67,7 @@ int main(){
     sf::Texture bluescreenTexture;
     sf::Texture mbTexture;
     sf::Texture virusTexture;
+    sf::Texture virusTexture2;
     sf::Font fStart;
     sf::Font fPause;
     sf::RectangleShape player;
@@ -76,6 +77,7 @@ int main(){
     sf::Image image;
     sf::Text msg1("Be careful because your \n GPU might be in fire!", fPause, 40);
     sf::Text msg2("Task Manager says everything is fine...\n but I feel like an IMPOSTOR virus is running in the background!", fPause, 40);
+    sf::Text msg3("The antivirus crashed, now you're on your own!", fPause, 30);
     sf::View camera(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920.f, 1080.f)));
     sf::Music *startMusic = new sf::Music();
     int x = 3000;
@@ -99,8 +101,8 @@ int main(){
     
     lv.level1(x, gpuTexture, graphics, cpuTexture, centralUnit, count, motherboard, mbTexture);
     lv.level2(storage2, x, ssdTexture, gpuTexture, graphics2, cpuTexture, centralUnit2, count, motherboard2, mbTexture);
-    lv.level3(centralUnit3, x, cpuTexture, virusTexture, vir1, graphics3, gpuTexture);
-    lv.level4(vir2, vir3, virusTexture, x);
+    lv.level3(centralUnit3, x, cpuTexture, virusTexture, vir1, graphics3, gpuTexture, virusTexture2);
+    lv.level4(vir2, vir3, virusTexture, x, virusTexture2);
 
     py.PlayerBuild(player, playerSize);
     float yPoz = player.getPosition().y;
@@ -121,6 +123,8 @@ int main(){
     msg1.setPosition(15500.f, 1890.f);
     msg2.setFillColor(sf::Color::White);
     msg2.setPosition(36000.f, 1890.f);
+    msg3.setFillColor(sf::Color::White);
+    msg3.setPosition(70000.f, 1920.f);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -262,6 +266,7 @@ int main(){
             sr->ObjectDraw(window, floor1, player);
             window.draw(msg1);
             window.draw(msg2);
+            window.draw(msg3);
 
             switch(setLevel){
                 //draw 1

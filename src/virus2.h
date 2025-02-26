@@ -13,16 +13,30 @@ class VIRUS2{
     float width;
     float height;
     
-    VIRUS2(float xPoz, float yPoz, float width, float height, sf::Texture &virusTexture){
+    VIRUS2(float xPoz, float yPoz, float width, float height, sf::Texture &virusTexture, sf::Texture &virusTexture2){
+        int texture = std::rand() % 2;
+
         this->xPoz = xPoz;
         this->yPoz = yPoz;
         this->width = width;
         this->height = height;
 
-        if(!virusTexture.loadFromFile("../assets/virus.png")){
-            throw std::runtime_error("virus texture was not found!");
+        switch(texture){
+            case 0:
+            if(!virusTexture.loadFromFile("../assets/virus.png")){
+                throw std::runtime_error("virus texture was not found!");
+            }
+            this->virus.setTexture(virusTexture); 
+            break;
+            
+            case 1:
+            if(!virusTexture2.loadFromFile("../assets/virus2.png")){
+                throw std::runtime_error("virus texture was not found!");
+            }
+            this->virus.setTexture(virusTexture2);
+            break;
         }
-        this->virus.setTexture(virusTexture);
+        
         virus.setScale(width, height);
         virus.setPosition(sf::Vector2f(xPoz, yPoz));
     }
@@ -33,7 +47,7 @@ class VIRUS2{
 
     void virusColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu, long long &count, long long &prev, long long &best, bool &isBluescreen, int &stage){
         if(player.getGlobalBounds().intersects(virus.getGlobalBounds())){
-            int choose = std::rand() % 3;
+            int choose = std::rand() % 2;
 
             switch(choose){
                 case 0: stage = 1; break;

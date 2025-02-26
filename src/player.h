@@ -19,7 +19,7 @@ class Player{
    void PlayerBuild(sf::RectangleShape &player, float &playerSize){
       player.setFillColor(sf::Color(120, 120, 120));
       player.setSize(sf::Vector2f(playerSize, playerSize));
-      player.setPosition(sf::Vector2f(70000.f, groundLevel));
+      player.setPosition(sf::Vector2f(100.f, groundLevel));
    }
 
    void playerCrouch(sf::RectangleShape &player, float &playerSize){
