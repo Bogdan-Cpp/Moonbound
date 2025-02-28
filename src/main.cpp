@@ -20,6 +20,7 @@
 #include "levels.h"
 #include "virus1.h"
 #include "virus2.h"
+#include "windows.h"
 
 int main(){
     bool isStartMenu = true;
@@ -68,6 +69,10 @@ int main(){
     sf::Texture mbTexture;
     sf::Texture virusTexture;
     sf::Texture virusTexture2;
+    sf::Texture winTexture1;
+    sf::Texture winTexture2;
+    sf::Texture winTexture3;
+    sf::Texture winTexture4;
     sf::Font fStart;
     sf::Font fPause;
     sf::RectangleShape player;
@@ -97,12 +102,15 @@ int main(){
     std::vector<VIRUS1> vir2;
     std::vector<VIRUS2> vir3;
 
+    std::vector<WIN> winObstacle2;
+
     std::srand(std::time(nullptr));
     
     lv.level1(x, gpuTexture, graphics, cpuTexture, centralUnit, count, motherboard, mbTexture);
     lv.level2(storage2, x, ssdTexture, gpuTexture, graphics2, cpuTexture, centralUnit2, count, motherboard2, mbTexture);
     lv.level3(centralUnit3, x, cpuTexture, virusTexture, vir1, graphics3, gpuTexture, virusTexture2);
     lv.level4(vir2, vir3, virusTexture, x, virusTexture2);
+    lv.level5(x, winObstacle2, winTexture1, winTexture2, winTexture3, winTexture4);
 
     py.PlayerBuild(player, playerSize);
     float yPoz = player.getPosition().y;
@@ -253,6 +261,12 @@ int main(){
                     for(auto &obstacle2 : vir3){
                         obstacle2.virusColide(player, sr, isGameMenu, count, prev, best, isBluescreen, stage);
                     }
+
+                    case 5:
+                    for(auto &obstacle1 : winObstacle2){
+                        obstacle1.winColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
+                    }
+                    break;
                 }
             }
         }
@@ -317,6 +331,11 @@ int main(){
                     vir_2.drawVirus(window);
                 }
                 break;
+                //draw 5
+                case 5:
+                for(auto &win : winObstacle2){
+                    win.drawWin(window);
+                }
             }
 
             if(isPauseMenu){

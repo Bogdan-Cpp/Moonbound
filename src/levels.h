@@ -7,6 +7,7 @@
 #include "player.h"
 #include "virus1.h"
 #include "virus2.h"
+#include "windows.h"
 
 class Level{
     public:
@@ -171,6 +172,25 @@ class Level{
                 case 4: random += 210; break;
                 case 5: random += 270; break;
                 case 6: random += 180; break;
+            }
+        }
+    }
+
+    void level5(int &x, std::vector<WIN> &winObstacle2, sf::Texture &winTexture1,
+        sf::Texture &winTexture2, sf::Texture &winTexture3, sf::Texture &winTexture4){
+        
+        x = 102000;
+        int obstacle;
+        int position;
+        int random = x;
+
+        for(int i = 0; i <= 50; i++){
+            winObstacle2.push_back(WIN(random, 1920, winTexture1, winTexture2, winTexture3, winTexture4));
+            position = std::rand() % 2;
+
+            switch(position){
+                case 0: random += 300;
+                case 1: random += 260;
             }
         }
     }
