@@ -27,7 +27,7 @@ int main(){
     bool isInfoMenu = false;
     bool isPauseMenu = false;
     bool isBluescreen = false;
-    bool devMode = true;
+    bool devMode = false;
 
     int setLevel = 0;
     bool shouldGenerate = true;
@@ -179,11 +179,14 @@ int main(){
                 else if(getX > 15000 && getX < 36000){
                     setLevel = 2;
                 }
-                else if(getX > 37000 && getX < 37000){
+                else if(getX > 37000 && getX < 70000){
                     setLevel = 3;
                 }
-                else if(getX > 70000){
+                else if(getX > 70000 && getX < 100000){
                     setLevel = 4;
+                }
+                else if(getX > 102000){
+                    setLevel = 5;
                 }
 
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
@@ -256,10 +259,7 @@ int main(){
         
         //draw
         window.clear(sf::Color::Black);
-
-        if(isStartMenu && ms != nullptr){
-            ms->startMenu(window, fStart);
-        }
+        if(isStartMenu && ms != nullptr){ms->startMenu(window, fStart);}
         
         else if(isGameMenu && sr != nullptr){
             sr->Scor(fStart, window, getX, count, prev, best);
@@ -267,7 +267,7 @@ int main(){
             window.draw(msg1);
             window.draw(msg2);
             window.draw(msg3);
-
+            
             switch(setLevel){
                 //draw 1
                 case 1:
