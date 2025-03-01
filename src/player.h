@@ -8,7 +8,7 @@
 
 class Player{
   public:
-  int speed = 6.f;
+  int speed = 8.f;
   bool isJumping = false;
   float gravity = -1.67f;
   float temp = 25.f;

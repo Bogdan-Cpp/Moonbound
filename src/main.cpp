@@ -11,16 +11,9 @@
 #include "menus/mainm.h"
 #include "menus/infom.h"
 #include "menus/startm.h"
-#include "Ssd.h"
 #include "player.h"
 #include "pausem.h"
-#include "graphicscard.h"
-#include "procesor.h"
-#include "motherboard.h"
-#include "levels.h"
-#include "virus1.h"
-#include "virus2.h"
-#include "windows.h"
+#include "obstacle.h"
 
 int main(){
     bool isStartMenu = true;
@@ -28,6 +21,7 @@ int main(){
     bool isInfoMenu = false;
     bool isPauseMenu = false;
     bool isBluescreen = false;
+    bool yes = true;
     bool devMode = false;
 
     int setLevel = 0;
@@ -36,16 +30,13 @@ int main(){
     long long count = 0;
     long long prev = 0;
     long long best = 0;
-    float prevSpeed;
     float playerSize = 50.f;
-    int stage = 0;
 
     auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "Moonbound");
     window.setFramerateLimit(120);
     window.setVerticalSyncEnabled(true);
 
     //class apelation
-    Level lv;
     Start *sr = new Start();
     Info *in = new Info();
     MenuS *ms = new MenuS();
@@ -79,38 +70,14 @@ int main(){
     sf::RectangleShape floor1;
     sf::Sprite blueScreen;
     Player py;
-    sf::Image image;
-    sf::Text msg1("Be careful because your \n GPU might be in fire!", fPause, 40);
-    sf::Text msg2("Task Manager says everything is fine...\n but I feel like an IMPOSTOR virus is running in the background!", fPause, 40);
-    sf::Text msg3("The antivirus crashed, now you're on your own!", fPause, 30);
     sf::View camera(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920.f, 1080.f)));
     sf::Music *startMusic = new sf::Music();
-    int x = 3000;
-    std::vector<GPU> graphics;
-    std::vector<CPU> centralUnit;
-    std::vector<MB> motherboard;
+    sf::Image image;
+    float x = 2000;
     
-    std::vector<Ssd> storage2;
-    std::vector<GPU> graphics2;
-    std::vector<CPU> centralUnit2;
-    std::vector<MB> motherboard2;
-
-    std::vector<VIRUS1> vir1;
-    std::vector<CPU> centralUnit3;
-    std::vector<GPU> graphics3;
-
-    std::vector<VIRUS1> vir2;
-    std::vector<VIRUS2> vir3;
-
-    std::vector<WIN> winObstacle2;
+    std::vector<OBS> obstacle;
 
     std::srand(std::time(nullptr));
-    
-    lv.level1(x, gpuTexture, graphics, cpuTexture, centralUnit, count, motherboard, mbTexture);
-    lv.level2(storage2, x, ssdTexture, gpuTexture, graphics2, cpuTexture, centralUnit2, count, motherboard2, mbTexture);
-    lv.level3(centralUnit3, x, cpuTexture, virusTexture, vir1, graphics3, gpuTexture, virusTexture2);
-    lv.level4(vir2, vir3, virusTexture, x, virusTexture2);
-    lv.level5(x, winObstacle2, winTexture1, winTexture2, winTexture3, winTexture4);
 
     py.PlayerBuild(player, playerSize);
     float yPoz = player.getPosition().y;
@@ -127,12 +94,6 @@ int main(){
     startMusic->play();
     blueScreen.setTexture(bluescreenTexture);
     blueScreen.setScale(1.f, 1.f);
-    msg1.setFillColor(sf::Color::White);
-    msg1.setPosition(15500.f, 1890.f);
-    msg2.setFillColor(sf::Color::White);
-    msg2.setPosition(36000.f, 1890.f);
-    msg3.setFillColor(sf::Color::White);
-    msg3.setPosition(70000.f, 1920.f);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -147,19 +108,30 @@ int main(){
         else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !isStartMenu && isInfoMenu){in->infoMenuQuit(in, ms, isInfoMenu, isStartMenu);}
         
         if(isGameMenu){
-            
+            py.speed = 8.f;
             camera.setCenter(player.getPosition().x + 250, yPoz);
             window.setView(camera);
             sr->ObjectPosition(floor1);
             py.PlayerMove(player);
             py.playerCrouch(player, playerSize);
-            std::cout << getX << '\n';
+            //std::cout << getX << '\n';
             blueScreen.setPosition(getX - 710.f, 1410);
             
-            //player speed
-            if(stage == 1){prevSpeed = 12.f;}
-            else if(stage == 2){prevSpeed = 3.f;}
-            else{prevSpeed = 8.f;}
+            if(getX <= x && yes){
+               x += 1000;
+               yes = false;
+               for(int i = 0; i <= 20; i++){
+                    obstacle.push_back(OBS(x, 1920.f, winTexture1, winTexture2, winTexture3, winTexture4, cpuTexture, gpuTexture, ssdTexture, mbTexture, virusTexture, virusTexture2));
+                    x += 300;
+               }
+            }
+            std::cout << x << '\n';
+            
+            if(getX >= x && !yes){
+                obstacle.clear();
+                yes = true;
+                x += 10;
+            }
 
             if(!isPauseMenu){count += 1;}
             if(isBluescreen){
@@ -178,25 +150,6 @@ int main(){
                 bluescreenMusic = nullptr;
             }
             else{
-                //normal
-                py.speed = prevSpeed;
-                
-                if(getX < 15000){
-                    setLevel = 1;
-                }
-                else if(getX > 15000 && getX < 36000){
-                    setLevel = 2;
-                }
-                else if(getX > 37000 && getX < 70000){
-                    setLevel = 3;
-                }
-                else if(getX > 70000 && getX < 100000){
-                    setLevel = 4;
-                }
-                else if(getX > 102000){
-                    setLevel = 5;
-                }
-
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
                     isPauseMenu = true;
                     pa = new Pause();
@@ -207,66 +160,14 @@ int main(){
                     isPauseMenu = false;
                     delete pa;
                     pa = nullptr;
-                    py.speed = prevSpeed;
+                    py.speed = 8.f;
                 }
                 if(gameMusic.getStatus() != sf::Music::Playing){gameMusic.play();}
-            }
-            
-            //coliziune
-            if(devMode){
-                switch(setLevel){
-                    case 1:
-                    for(auto &obstacle2 : graphics){
-                        obstacle2.gpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
+                
+                if(devMode){
+                    for(auto &obstacle1 : obstacle){
+                        obstacle1.obsColide(player, sr, isGameMenu, count, prev, best, isBluescreen, x);
                     }
-                    for(auto &obstacle2 : centralUnit){
-                        obstacle2.cpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
-                    }
-                    for(auto &obstacle4 : motherboard){
-                        obstacle4.mbColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
-                    }
-                    break;
-
-                    case 2:
-                    for(auto &obstacle1 : storage2){
-                        obstacle1.ssdColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
-                    }
-                    for(auto &obstacle2 : graphics2){
-                        obstacle2.gpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
-                    }
-                    for(auto &obstacle2 : centralUnit2){
-                        obstacle2.cpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
-                    }
-                    for(auto &obstacle4 : motherboard2){
-                        obstacle4.mbColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
-                    }
-                    break;
-                    
-                    case 3:
-                    for(auto &obstacle1 : vir1){
-                        obstacle1.virusColide(player, sr, isGameMenu, count, prev, best, isBluescreen, playerSize, stage);
-                    }
-                    for(auto &obstacle2 : centralUnit3){
-                        obstacle2.cpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
-                    }
-                    for(auto &obstacle3 : graphics3){
-                        obstacle3.gpuColide(player, sr, isGameMenu, count, prev, best, isBluescreen); 
-                    }
-                    break;
-
-                    case 4:
-                    for(auto &obstacle1 : vir2){
-                        obstacle1.virusColide(player, sr, isGameMenu, count, prev, best, isBluescreen, playerSize, stage);
-                    }
-                    for(auto &obstacle2 : vir3){
-                        obstacle2.virusColide(player, sr, isGameMenu, count, prev, best, isBluescreen, stage);
-                    }
-
-                    case 5:
-                    for(auto &obstacle1 : winObstacle2){
-                        obstacle1.winColide(player, sr, isGameMenu, count, prev, best, isBluescreen);
-                    }
-                    break;
                 }
             }
         }
@@ -278,64 +179,9 @@ int main(){
         else if(isGameMenu && sr != nullptr){
             sr->Scor(fStart, window, getX, count, prev, best);
             sr->ObjectDraw(window, floor1, player);
-            window.draw(msg1);
-            window.draw(msg2);
-            window.draw(msg3);
-            
-            switch(setLevel){
-                //draw 1
-                case 1:
-                for(auto &graphic : graphics){
-                    graphic.drawGpu(window);
-                }
-                for(auto &procesores : centralUnit){
-                    procesores.drawCpu(window);
-                }
-                for(auto &motherboards : motherboard){
-                    motherboards.drawMb(window);
-                }
-                break;
-                //draw 2
-                case 2:
-                for(auto &storages : storage2){
-                    storages.drawSsd(window);
-                }
-                for(auto &graphic : graphics2){
-                    graphic.drawGpu(window);
-                }
-                for(auto &procesores : centralUnit2){
-                    procesores.drawCpu(window);
-                }
-                for(auto &motherboards : motherboard2){
-                    motherboards.drawMb(window);
-                }
-                break;
-                //draw 3
-                case 3:
-                for(auto &procesor : centralUnit3){
-                    procesor.drawCpu(window);
-                }
-                for(auto &vir : vir1){
-                    vir.drawVirus(window);
-                }
-                for(auto &graphic : graphics3){
-                    graphic.drawGpu(window);
-                }
-                break;
-                //draw 4
-                case 4:
-                for(auto &vir_1 : vir2){
-                    vir_1.drawVirus(window);
-                }
-                for(auto &vir_2 : vir3){
-                    vir_2.drawVirus(window);
-                }
-                break;
-                //draw 5
-                case 5:
-                for(auto &win : winObstacle2){
-                    win.drawWin(window);
-                }
+
+            for(auto &obs : obstacle){
+                obs.drawObs(window);
             }
 
             if(isPauseMenu){
