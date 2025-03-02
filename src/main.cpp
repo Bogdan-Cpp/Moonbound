@@ -21,7 +21,7 @@ int main(){
     bool isPauseMenu = false;
     bool isBluescreen = false;
     bool yes = true;
-    bool devMode = false;
+    bool devMode = true;
 
     int setLevel = 0;
 
@@ -67,6 +67,12 @@ int main(){
     sf::Texture winTexture9;
     sf::Texture moonTexture;
     sf::Texture pauseTexture;
+    sf::Texture backgroundT;
+    sf::Texture backgroundT2;
+    sf::Texture backgroundT3;
+    sf::Sprite back;
+    sf::Sprite back2;
+    sf::Sprite back3;
     sf::Font fStart;
     sf::Font fPause;
     sf::RectangleShape player;
@@ -79,6 +85,7 @@ int main(){
     sf::Music *startMusic = new sf::Music();
     sf::Image image;
     float x = 2000;
+    float backSpeed = 0;
     
     std::vector<OBS> obstacle;
 
@@ -96,6 +103,9 @@ int main(){
     if(!bluescreenTexture.loadFromFile("../assets/bluescreen1.png")){return -1;}
     if(!moonTexture.loadFromFile("../assets/moonbound.png")){return -1;}
     if(!pauseTexture.loadFromFile("../assets/pause.png")){return -1;}
+    if(!backgroundT.loadFromFile("../assets/spacedraw3.png")){return -1;}
+    if(!backgroundT2.loadFromFile("../assets/spacedraw2.png")){return -1;}
+    if(!backgroundT3.loadFromFile("../assets/spacedraw1.png")){return -1;}
 
     window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
     startMusic->play();
@@ -106,6 +116,12 @@ int main(){
     moonbound.setPosition(1000.f, 150.f);
     pause.setTexture(pauseTexture);
     pause.setScale(1.f, 1.f);
+    back.setTexture(backgroundT);
+    back.setScale(1.f, 1.f);
+    back2.setTexture(backgroundT2);
+    back2.setScale(1.f, 1.f);
+    back3.setTexture(backgroundT3);
+    back3.setScale(1.f, 1.f);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -120,12 +136,17 @@ int main(){
         else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !isStartMenu && isInfoMenu){in->infoMenuQuit(in, ms, isInfoMenu, isStartMenu);}
         
         if(isGameMenu){
+            float backPoz = (getX - 750) - backSpeed;
+            backSpeed += 0.5f;
             camera.setCenter(player.getPosition().x + 250, yPoz);
             window.setView(camera);
             sr->ObjectPosition(floor1, getX);
             py.PlayerMove(player);
             py.playerCrouch(player, playerSize);
             blueScreen.setPosition(getX - 710.f, 1410.f);
+            back.setPosition(backPoz, 1400.f);
+            back2.setPosition(backPoz + 1920, 1400.f);
+            back3.setPosition(backPoz + 3840.f, 1400.f);
             
             //algorithm---<
             if(getX <= x && yes){
@@ -204,6 +225,9 @@ int main(){
         }
         
         else if(isGameMenu && sr != nullptr){
+            window.draw(back);
+            window.draw(back2);
+            window.draw(back3);
             sr->Scor(fStart, window, getX, count, prev, best);
             sr->ObjectDraw(window, floor1, player);
             
@@ -216,6 +240,7 @@ int main(){
             if(isBluescreen){
                 window.draw(blueScreen);
             }
+            
         }
 
         else if(isInfoMenu && in != nullptr){
