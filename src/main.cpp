@@ -12,7 +12,6 @@
 #include "menus/infom.h"
 #include "menus/startm.h"
 #include "player.h"
-#include "pausem.h"
 #include "obstacle.h"
 
 int main(){
@@ -25,12 +24,12 @@ int main(){
     bool devMode = false;
 
     int setLevel = 0;
-    bool shouldGenerate = true;
 
     long long count = 0;
     long long prev = 0;
     long long best = 0;
     float playerSize = 50.f;
+    int stage = 1;
 
     auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "Moonbound");
     window.setFramerateLimit(120);
@@ -40,18 +39,15 @@ int main(){
     Start *sr = new Start();
     Info *in = new Info();
     MenuS *ms = new MenuS();
-    Pause *pa = new Pause();
     sf::Music gameMusic;
     sf::Music *bluescreenMusic = new sf::Music();
     
     delete sr;
     delete in;
-    delete pa;
     delete bluescreenMusic;
     bluescreenMusic = nullptr;
     sr = nullptr;
     in = nullptr;
-    pa = nullptr;
     
     sf::Texture cpuTexture;
     sf::Texture gpuTexture;
@@ -64,11 +60,20 @@ int main(){
     sf::Texture winTexture2;
     sf::Texture winTexture3;
     sf::Texture winTexture4;
+    sf::Texture winTexture5;
+    sf::Texture winTexture6;
+    sf::Texture winTexture7;
+    sf::Texture winTexture8;
+    sf::Texture winTexture9;
+    sf::Texture moonTexture;
+    sf::Texture pauseTexture;
     sf::Font fStart;
     sf::Font fPause;
     sf::RectangleShape player;
     sf::RectangleShape floor1;
     sf::Sprite blueScreen;
+    sf::Sprite moonbound;
+    sf::Sprite pause;
     Player py;
     sf::View camera(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920.f, 1080.f)));
     sf::Music *startMusic = new sf::Music();
@@ -76,6 +81,7 @@ int main(){
     float x = 2000;
     
     std::vector<OBS> obstacle;
+    std::vector<int> list = {1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 1, 2, 1, 1, 3, 2, 1, 2};
 
     std::srand(std::time(nullptr));
 
@@ -89,11 +95,18 @@ int main(){
     if(!gameMusic.openFromFile("../assets/gameMusic2.ogg")){return -1;}
     if(!image.loadFromFile("../assets/gameIcon.png")){return -1;}
     if(!bluescreenTexture.loadFromFile("../assets/bluescreen1.png")){return -1;}
+    if(!moonTexture.loadFromFile("../assets/moonbound.png")){return -1;}
+    if(!pauseTexture.loadFromFile("../assets/pause.png")){return -1;}
 
     window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
     startMusic->play();
     blueScreen.setTexture(bluescreenTexture);
     blueScreen.setScale(1.f, 1.f);
+    moonbound.setTexture(moonTexture);
+    moonbound.setScale(1.5f, 1.5f);
+    moonbound.setPosition(1000.f, 150.f);
+    pause.setTexture(pauseTexture);
+    pause.setScale(1.f, 1.f);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -108,32 +121,42 @@ int main(){
         else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !isStartMenu && isInfoMenu){in->infoMenuQuit(in, ms, isInfoMenu, isStartMenu);}
         
         if(isGameMenu){
-            py.speed = 8.f;
             camera.setCenter(player.getPosition().x + 250, yPoz);
             window.setView(camera);
             sr->ObjectPosition(floor1);
             py.PlayerMove(player);
             py.playerCrouch(player, playerSize);
-            //std::cout << getX << '\n';
-            blueScreen.setPosition(getX - 710.f, 1410);
+            blueScreen.setPosition(getX - 710.f, 1410.f);
             
+            //algorithm---<
             if(getX <= x && yes){
                x += 1000;
                yes = false;
                for(int i = 0; i <= 20; i++){
-                    obstacle.push_back(OBS(x, 1920.f, winTexture1, winTexture2, winTexture3, winTexture4, cpuTexture, gpuTexture, ssdTexture, mbTexture, virusTexture, virusTexture2));
-                    x += 300;
+                    int position = std::rand() % 3;
+                    
+                    obstacle.push_back(OBS(x, 1920, winTexture1, winTexture2, winTexture3, winTexture4, cpuTexture,
+                    gpuTexture, ssdTexture, mbTexture, virusTexture, virusTexture2, winTexture5, winTexture6,
+                    winTexture7, winTexture8, winTexture9));
+                    
+                    switch(position){
+                        case 0: x += 1000; break;
+                        case 1: x += 600; break;
+                        case 2: x += 900; break;
+                    }
                }
             }
             std::cout << x << '\n';
+            std::cout << getX << '\n';
             
             if(getX >= x && !yes){
                 obstacle.clear();
                 yes = true;
-                x += 10;
+                x += 50;
+                py.speed += 1;
             }
+            //algorithm---<
 
-            if(!isPauseMenu){count += 1;}
             if(isBluescreen){
                 //if is bluescreen
                 gameMusic.stop();
@@ -148,23 +171,25 @@ int main(){
                 isBluescreen = false;
                 delete bluescreenMusic;
                 bluescreenMusic = nullptr;
+                py.speed = 8.f;
             }
             else{
+                if(!isPauseMenu){
+                    count += 1;
+                }
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
+                    pause.setPosition(getX - 300, 1775.f);
                     isPauseMenu = true;
-                    pa = new Pause();
                     py.speed = 0.f;
                 }
     
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::Z) && isPauseMenu){
                     isPauseMenu = false;
-                    delete pa;
-                    pa = nullptr;
                     py.speed = 8.f;
                 }
                 if(gameMusic.getStatus() != sf::Music::Playing){gameMusic.play();}
                 
-                if(devMode){
+                if(!devMode){
                     for(auto &obstacle1 : obstacle){
                         obstacle1.obsColide(player, sr, isGameMenu, count, prev, best, isBluescreen, x);
                     }
@@ -174,18 +199,20 @@ int main(){
         
         //draw
         window.clear(sf::Color::Black);
-        if(isStartMenu && ms != nullptr){ms->startMenu(window, fStart);}
+        if(isStartMenu && ms != nullptr){
+            window.draw(moonbound);
+            ms->startMenu(window, fStart);
+        }
         
         else if(isGameMenu && sr != nullptr){
             sr->Scor(fStart, window, getX, count, prev, best);
             sr->ObjectDraw(window, floor1, player);
-
+            
             for(auto &obs : obstacle){
                 obs.drawObs(window);
             }
-
             if(isPauseMenu){
-                pa->drawPause(fPause, window, getX);
+                window.draw(pause);
             }
             if(isBluescreen){
                 window.draw(blueScreen);

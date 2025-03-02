@@ -15,9 +15,11 @@ class OBS{
     OBS(float xPoz, float yPoz, sf::Texture &winTexture1,sf::Texture &winTexture2,
         sf::Texture &winTexture3, sf::Texture &winTexture4, sf::Texture &cpuTexture,
         sf::Texture &gpuTexture, sf::Texture &ssdTexture, sf::Texture &mbTexture, 
-        sf::Texture &virusTexture, sf::Texture &virusTexture2){
+        sf::Texture &virusTexture, sf::Texture &virusTexture2, sf::Texture &winTexture5,
+        sf::Texture &winTexture6, sf::Texture &winTexture7, sf::Texture &winTexture8,
+        sf::Texture &winTexture9){
         
-        int texture = std::rand() % 10;
+        int texture = std::rand() % 15;
 
         this->xPoz = xPoz;
         this->yPoz = yPoz;
@@ -42,9 +44,9 @@ class OBS{
             break;
 
             case 3:
-            if(!winTexture4.loadFromFile("../assets/win4.png")){throw std::runtime_error("win texture error!");}
+            if(!winTexture4.loadFromFile("../assets/win5.png")){throw std::runtime_error("win texture error!");}
             this->obs.setTexture(winTexture4);
-            obs.setScale(2.f, 2.f);
+            obs.setScale(0.2f, 0.2f);
             break;
 
             case 4:
@@ -82,6 +84,36 @@ class OBS{
             this->obs.setTexture(virusTexture2);
             obs.setScale(0.2f, 0.2f);
             break;
+
+            case 10:
+            if(!winTexture5.loadFromFile("../assets/win6.png")){throw std::runtime_error("win texture error!");}
+            this->obs.setTexture(winTexture5);
+            obs.setScale(0.7f, 0.7f);
+            break;
+
+            case 11:
+            if(!winTexture6.loadFromFile("../assets/win7.png")){throw std::runtime_error("win texture error!");}
+            this->obs.setTexture(winTexture6);
+            obs.setScale(0.7f, 0.7f);
+            break;
+
+            case 12:
+            if(!winTexture7.loadFromFile("../assets/win8.png")){throw std::runtime_error("win texture error!");}
+            this->obs.setTexture(winTexture7);
+            obs.setScale(0.7f, 0.7f);
+            break;
+
+            case 13:
+            if(!winTexture8.loadFromFile("../assets/win9.png")){throw std::runtime_error("win texture error!");}
+            this->obs.setTexture(winTexture8);
+            obs.setScale(0.7f, 0.7f);
+            break;
+
+            case 14:
+            if(!winTexture9.loadFromFile("../assets/win10.png")){throw std::runtime_error("win texture error!");}
+            this->obs.setTexture(winTexture9);
+            obs.setScale(0.7f, 0.7f);
+            break;
         }
         obs.setPosition(sf::Vector2f(xPoz, yPoz));
     }
@@ -91,7 +123,8 @@ class OBS{
     }
 
     void obsColide(sf::RectangleShape &player, Start *&sr, bool &isGameMenu,
-        long long &count, long long &prev, long long &best, bool &isBluescreen, float &x){
+        long long &count, long long &prev, long long &best, bool &isBluescreen,
+        float &x){
             
         sf::FloatRect newObstacle(
             obs.getPosition().x + obs.getGlobalBounds().width * 0.1f,  
