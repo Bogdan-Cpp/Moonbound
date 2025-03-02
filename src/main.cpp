@@ -81,7 +81,6 @@ int main(){
     float x = 2000;
     
     std::vector<OBS> obstacle;
-    std::vector<int> list = {1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 1, 2, 1, 1, 3, 2, 1, 2};
 
     std::srand(std::time(nullptr));
 
@@ -123,7 +122,7 @@ int main(){
         if(isGameMenu){
             camera.setCenter(player.getPosition().x + 250, yPoz);
             window.setView(camera);
-            sr->ObjectPosition(floor1);
+            sr->ObjectPosition(floor1, getX);
             py.PlayerMove(player);
             py.playerCrouch(player, playerSize);
             blueScreen.setPosition(getX - 710.f, 1410.f);

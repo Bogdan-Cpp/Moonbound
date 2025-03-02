@@ -21,10 +21,10 @@ class Start{
         sr = new Start();
     }
 
-    void ObjectPosition(sf::RectangleShape &floor1){
+    void ObjectPosition(sf::RectangleShape &floor1, float &getX){
         floor1.setFillColor(sf::Color::White);
-        floor1.setSize(sf::Vector2f(140000.f, 500.f));
-        floor1.setPosition(sf::Vector2f(0.f, 2000.f));
+        floor1.setSize(sf::Vector2f(3000.f, 500.f));
+        floor1.setPosition(sf::Vector2f(getX - 1000.f, 2000.f));
     }
 
     void ObjectDraw(sf::RenderWindow& window, sf::RectangleShape &floor1, sf::RectangleShape &player){
