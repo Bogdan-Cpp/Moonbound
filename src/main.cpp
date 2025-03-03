@@ -21,6 +21,7 @@ int main(){
     bool isPauseMenu = false;
     bool isBluescreen = false;
     bool yes = true;
+    bool shouldChange = true;
     bool devMode = true;
 
     int setLevel = 0;
@@ -84,8 +85,15 @@ int main(){
     sf::View camera(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f(1920.f, 1080.f)));
     sf::Music *startMusic = new sf::Music();
     sf::Image image;
+    bool isTrue = false;
     float x = 2000;
     float backSpeed = 0;
+    float remember1 = 35000;
+    float remember2 = 70000;
+    float remember3 = 105000;
+    int a = 35000;
+    int b = 70000;
+    int c = 105000;
     
     std::vector<OBS> obstacle;
 
@@ -136,18 +144,57 @@ int main(){
         else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !isStartMenu && isInfoMenu){in->infoMenuQuit(in, ms, isInfoMenu, isStartMenu);}
         
         if(isGameMenu){
-            float backPoz = (getX - 750) - backSpeed;
+            float backPoz1 = (getX - 750) - backSpeed;
+            float backPoz2 = (getX - 750) - backSpeed;
+            float backPoz3 = (getX - 750) - backSpeed;
             backSpeed += 0.5f;
+            std::cout << getX << '\n';
+            
+            if (getX >= a) {
+                backPoz1 += 1920 * 3; 
+            }
+            if(getX >= b){
+                backPoz2 += 1920 * 3;
+            }
+            if(getX >= c){
+                backPoz3 += 1920 * 3;
+                //isTrue = true;
+            }
+
+            if(isTrue){
+                a += 105000;
+                b += 105000;
+                c += 105000;
+                isTrue = false;
+            }
+
+            /**if (getX >= remember1 && a == 1) {
+                backPoz1 += 1920 * 3;
+                remember1 += 105000;
+                a = 2;
+            }
+            else if (getX >= remember2 && a == 2) {
+                backPoz2 += 1920 * 3;
+                remember2 += 105000;
+                a = 3;
+            }
+            else if (getX >= remember3 && a == 3) {
+                backPoz3 += 1920 * 3;
+                remember3 += 105000;
+                a = 1;
+            }**/
+
+            back.setPosition(backPoz1, 1400.f);
+            back2.setPosition(backPoz2 + 1920, 1400.f);
+            back3.setPosition(backPoz3 + 3840, 1400.f);
+            
             camera.setCenter(player.getPosition().x + 250, yPoz);
             window.setView(camera);
             sr->ObjectPosition(floor1, getX);
             py.PlayerMove(player);
             py.playerCrouch(player, playerSize);
             blueScreen.setPosition(getX - 710.f, 1410.f);
-            back.setPosition(backPoz, 1400.f);
-            back2.setPosition(backPoz + 1920, 1400.f);
-            back3.setPosition(backPoz + 3840.f, 1400.f);
-            
+
             //algorithm---<
             if(getX <= x && yes){
                x += 1000;
@@ -166,8 +213,6 @@ int main(){
                     }
                }
             }
-            std::cout << x << '\n';
-            std::cout << getX << '\n';
             
             if(getX >= x && !yes){
                 obstacle.clear();
