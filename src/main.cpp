@@ -14,6 +14,13 @@
 #include "player.h"
 #include "obstacle.h"
 
+void Algorithm(bool &yes, sf::Texture &winTexture1, sf::Texture &winTexture2,
+    sf::Texture &winTexture3, sf::Texture &winTexture4, sf::Texture &cpuTexture,
+    sf::Texture &gpuTexture, sf::Texture &ssdTexture, sf::Texture &mbTexture,
+    sf::Texture &virusTexture, sf::Texture &virusTexture2, sf::Texture &winTexture5,
+    sf::Texture &winTexture6, sf::Texture &winTexture7, sf::Texture &winTexture8,
+    sf::Texture &winTexture9, float &x, std::vector<OBS> &obstacle);
+
 int main(){
     bool isStartMenu = true;
     bool isGameMenu = false;
@@ -22,7 +29,7 @@ int main(){
     bool isBluescreen = false;
     bool yes = true;
     bool shouldChange = true;
-    bool devMode = true;
+    bool devMode = false;
 
     int setLevel = 0;
 
@@ -144,74 +151,11 @@ int main(){
         else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && !isStartMenu && isInfoMenu){in->infoMenuQuit(in, ms, isInfoMenu, isStartMenu);}
         
         if(isGameMenu){
-            float backPoz1 = (getX - 750) - backSpeed;
-            float backPoz2 = (getX - 750) - backSpeed;
-            float backPoz3 = (getX - 750) - backSpeed;
-            backSpeed += 0.5f;
-            std::cout << getX << '\n';
-            
-            if (getX >= a) {
-                backPoz1 += 1920 * 3; 
-            }
-            if(getX >= b){
-                backPoz2 += 1920 * 3;
-            }
-            if(getX >= c){
-                backPoz3 += 1920 * 3;
-                //isTrue = true;
-            }
-
-            if(isTrue){
-                a += 105000;
-                b += 105000;
-                c += 105000;
-                isTrue = false;
-            }
-
-            /**if (getX >= remember1 && a == 1) {
-                backPoz1 += 1920 * 3;
-                remember1 += 105000;
-                a = 2;
-            }
-            else if (getX >= remember2 && a == 2) {
-                backPoz2 += 1920 * 3;
-                remember2 += 105000;
-                a = 3;
-            }
-            else if (getX >= remember3 && a == 3) {
-                backPoz3 += 1920 * 3;
-                remember3 += 105000;
-                a = 1;
-            }**/
-
-            back.setPosition(backPoz1, 1400.f);
-            back2.setPosition(backPoz2 + 1920, 1400.f);
-            back3.setPosition(backPoz3 + 3840, 1400.f);
-            
-            camera.setCenter(player.getPosition().x + 250, yPoz);
-            window.setView(camera);
-            sr->ObjectPosition(floor1, getX);
-            py.PlayerMove(player);
-            py.playerCrouch(player, playerSize);
-            blueScreen.setPosition(getX - 710.f, 1410.f);
-
-            //algorithm---<
+            sr->Background(backSpeed, getX, a, b, c, back, back2, back3);
+            sr->Pozitioning(window, py, camera, player, yPoz, getX, playerSize, floor1, sr, blueScreen);
+        
             if(getX <= x && yes){
-               x += 1000;
-               yes = false;
-               for(int i = 0; i <= 20; i++){
-                    int position = std::rand() % 3;
-                    
-                    obstacle.push_back(OBS(x, 1920, winTexture1, winTexture2, winTexture3, winTexture4, cpuTexture,
-                    gpuTexture, ssdTexture, mbTexture, virusTexture, virusTexture2, winTexture5, winTexture6,
-                    winTexture7, winTexture8, winTexture9));
-                    
-                    switch(position){
-                        case 0: x += 1000; break;
-                        case 1: x += 600; break;
-                        case 2: x += 900; break;
-                    }
-               }
+               Algorithm(yes, winTexture1, winTexture2, winTexture3, winTexture4, cpuTexture, gpuTexture, ssdTexture, mbTexture, virusTexture, virusTexture2, winTexture5, winTexture6, winTexture7, winTexture8, winTexture9, x, obstacle);
             }
             
             if(getX >= x && !yes){
@@ -220,45 +164,18 @@ int main(){
                 x += 50;
                 py.speed += 1;
             }
-            //algorithm---<
 
             if(isBluescreen){
-                //if is bluescreen
-                gameMusic.stop();
-                bluescreenMusic = new sf::Music();
-                if(!bluescreenMusic->openFromFile("../assets/bluescreenM.ogg")){return -1;}
-                if(bluescreenMusic->getStatus() != sf::Music::Playing){bluescreenMusic->play();}
-                
-                py.speed = 0;
-                count += 0;
-                std::this_thread::sleep_for(std::chrono::seconds(2));
-                
-                isBluescreen = false;
-                delete bluescreenMusic;
-                bluescreenMusic = nullptr;
-                py.speed = 8.f;
+                sr->blueScreen(bluescreenMusic, count, isBluescreen, gameMusic, py);
             }
             else{
-                if(!isPauseMenu){
-                    count += 1;
-                }
-                if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
-                    pause.setPosition(getX - 300, 1775.f);
-                    isPauseMenu = true;
-                    py.speed = 0.f;
-                }
-    
-                if(sf::Keyboard::isKeyPressed(sf::Keyboard::Z) && isPauseMenu){
-                    isPauseMenu = false;
-                    py.speed = 8.f;
-                }
-                if(gameMusic.getStatus() != sf::Music::Playing){gameMusic.play();}
-                
+                count += 1;
                 if(!devMode){
                     for(auto &obstacle1 : obstacle){
                         obstacle1.obsColide(player, sr, isGameMenu, count, prev, best, isBluescreen, x);
                     }
                 }
+                if(gameMusic.getStatus() != sf::Music::Playing){gameMusic.play();}
             }
         }
         
@@ -294,4 +211,28 @@ int main(){
         window.display();
     }
     return 0;
+}
+
+void Algorithm(bool &yes, sf::Texture &winTexture1, sf::Texture &winTexture2,
+    sf::Texture &winTexture3, sf::Texture &winTexture4, sf::Texture &cpuTexture,
+    sf::Texture &gpuTexture, sf::Texture &ssdTexture, sf::Texture &mbTexture,
+    sf::Texture &virusTexture, sf::Texture &virusTexture2, sf::Texture &winTexture5,
+    sf::Texture &winTexture6, sf::Texture &winTexture7, sf::Texture &winTexture8,
+    sf::Texture &winTexture9, float &x, std::vector<OBS> &obstacle){
+    
+    x += 1000;
+    yes = false;
+    for(int i = 0; i <= 20; i++){
+        int position = std::rand() % 3;
+                
+        obstacle.push_back(OBS(x, 1920, winTexture1, winTexture2, winTexture3, winTexture4, cpuTexture,
+        gpuTexture, ssdTexture, mbTexture, virusTexture, virusTexture2, winTexture5, winTexture6,
+        winTexture7, winTexture8, winTexture9));
+                
+        switch(position){
+            case 0: x += 1000; break;
+            case 1: x += 600; break;
+            case 2: x += 900; break;
+        }
+    }
 }
