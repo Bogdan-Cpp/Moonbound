@@ -77,7 +77,9 @@ class Start{
         gameMusic.stop();
         bluescreenMusic = new sf::Music();
         if(!bluescreenMusic->openFromFile("../assets/bluescreenM.ogg")){
-            throw std::runtime_error("blueScreen Music was not found!");
+            if(!bluescreenMusic->openFromFile("../share/bluescreenM.ogg")){
+                throw std::runtime_error("blueScreen Music was not found!");
+            }
         }
         if(bluescreenMusic->getStatus() != sf::Music::Playing){bluescreenMusic->play();}
                 

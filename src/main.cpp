@@ -8,6 +8,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
+#include <filesystem>
 #include "menus/mainm.h"
 #include "menus/infom.h"
 #include "menus/startm.h"
@@ -110,17 +111,61 @@ int main(){
     float yPoz = player.getPosition().y;
 
     //file verification
-    if(!fStart.loadFromFile("../assets/startFont.ttf")){return -1;}
-    if(!fPause.loadFromFile("../assets/pauseFont.ttf")){return -1;}
-    if(!startMusic->openFromFile("../assets/music.ogg")){return -1;}
-    if(!gameMusic.openFromFile("../assets/gameMusic2.ogg")){return -1;}
-    if(!image.loadFromFile("../assets/gameIcon.png")){return -1;}
-    if(!bluescreenTexture.loadFromFile("../assets/bluescreen1.png")){return -1;}
-    if(!moonTexture.loadFromFile("../assets/moonbound.png")){return -1;}
-    if(!pauseTexture.loadFromFile("../assets/pause.png")){return -1;}
-    if(!backgroundT.loadFromFile("../assets/spacedraw3.png")){return -1;}
-    if(!backgroundT2.loadFromFile("../assets/spacedraw2.png")){return -1;}
-    if(!backgroundT3.loadFromFile("../assets/spacedraw1.png")){return -1;}
+    if(!fStart.loadFromFile("../assets/startFont.ttf")){
+        if(!fStart.loadFromFile("../share/startFont.ttf")){
+            return -1;
+        }
+    }
+    if(!fPause.loadFromFile("../assets/pauseFont.ttf")){
+        if(!fPause.loadFromFile("../share/pauseFont.ttf")){
+            return -1;
+        }
+    }
+    if(!startMusic->openFromFile("../assets/music.ogg")){
+        if(!startMusic->openFromFile("../share/music.ogg")){
+            return -1;
+        }
+    }
+    if(!gameMusic.openFromFile("../assets/gameMusic2.ogg")){
+        if(!gameMusic.openFromFile("../share/gameMusic2.ogg")){
+            return -1;
+        }
+    }
+    if(!image.loadFromFile("../assets/gameIcon.png")){
+        if(!image.loadFromFile("../share/gameIcon.png")){
+            return -1;
+        }
+    }
+    if(!bluescreenTexture.loadFromFile("../assets/bluescreen1.png")){
+        if(!bluescreenTexture.loadFromFile("../share/bluescreen1.png")){
+            return -1;
+        }
+    }
+    if(!moonTexture.loadFromFile("../assets/moonbound.png")){
+        if(!moonTexture.loadFromFile("../share/moonbound.png")){
+            return -1;
+        }
+    }
+    if(!pauseTexture.loadFromFile("../assets/pause.png")){
+        if(!pauseTexture.loadFromFile("../share/pause.png")){
+            return -1;
+        }
+    }
+    if(!backgroundT.loadFromFile("../assets/spacedraw3.png")){
+        if(!backgroundT.loadFromFile("../share/spacedraw3.png")){
+            return -1;
+        }
+    }
+    if(!backgroundT2.loadFromFile("../assets/spacedraw2.png")){
+        if(!backgroundT2.loadFromFile("../share/spacedraw2.png")){
+            return -1;
+        }
+    }
+    if(!backgroundT3.loadFromFile("../assets/spacedraw1.png")){
+        if(!backgroundT3.loadFromFile("../share/spacedraw1.png")){
+            return -1;
+        }
+    }
 
     window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
     startMusic->play();
